@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Automated Quality Content"
+  description="Discover expertly written articles on personal finance, home improvement, and health & wellness. Automated content generation with human-quality standards."
+  canonicalUrl="/"
+>
+  <!-- Hero Section -->
+  <section class="text-center py-16 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl mb-12">
+    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+      Quality Content, <span class="text-blue-600">Automated</span>
+    </h1>
+    <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">
+      AI-powered articles on personal finance, home improvement, and health & wellness. 
+      Expertly researched, SEO-optimized, and constantly updated.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="/personal-finance" class="btn btn-primary">
+        Personal Finance
+      </a>
+      <a href="/home-improvement" class="btn btn-secondary">
+        Home Improvement
+      </a>
+      <a href="/health-wellness" class="btn btn-secondary">
+        Health & Wellness
+      </a>
+    </div>
+  </section>
+
+  <!-- Featured Articles -->
+  <section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center">Recently Published</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Article Card 1 -->
+      <article class="card">
+        <div class="mb-4">
+          <span class="inline-block px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">
+            Personal Finance
+          </span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">
+          <a href="/article/how-to-save-money-fast" class="hover:text-blue-600">
+            How to Save Money Fast: 10 Proven Strategies
+          </a>
+        </h3>
+        <p class="text-gray-600 mb-4">
+          Learn practical tips to boost your savings rate and build financial security faster than you thought possible.
+        </p>
+        <div class="flex items-center text-sm text-gray-500">
+          <span>5 min read</span>
+          <span class="mx-2">•</span>
+          <span>Updated recently</span>
+        </div>
+      </article>
+
+      <!-- Article Card 2 -->
+      <article class="card">
+        <div class="mb-4">
+          <span class="inline-block px-3 py-1 text-sm font-semibold text-green-700 bg-green-100 rounded-full">
+            Home Improvement
+          </span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">
+          <a href="/article/how-to-fix-leaky-faucet" class="hover:text-blue-600">
+            How to Fix a Leaky Faucet: DIY Guide for Beginners
+          </a>
+        </h3>
+        <p class="text-gray-600 mb-4">
+          Step-by-step instructions to repair common faucet types and save hundreds on plumber bills.
+        </p>
+        <div class="flex items-center text-sm text-gray-500">
+          <span>7 min read</span>
+          <span class="mx-2">•</span>
+          <span>Updated recently</span>
+        </div>
+      </article>
+
+      <!-- Article Card 3 -->
+      <article class="card">
+        <div class="mb-4">
+          <span class="inline-block px-3 py-1 text-sm font-semibold text-purple-700 bg-purple-100 rounded-full">
+            Health & Wellness
+          </span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">
+          <a href="/article/benefits-of-meditation" class="hover:text-blue-600">
+            7 Science-Backed Benefits of Daily Meditation
+          </a>
+        </h3>
+        <p class="text-gray-600 mb-4">
+          Discover how just 10 minutes of meditation daily can improve your mental and physical health.
+        </p>
+        <div class="flex items-center text-sm text-gray-500">
+          <span>6 min read</span>
+          <span class="mx-2">•</span>
+          <span>Updated recently</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center">Explore Categories</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="/personal-finance" class="group block p-8 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl hover:shadow-xl transition-shadow">
+        <div class="text-center">
+          <div class="text-4xl mb-4">💰</div>
+          <h3 class="text-2xl font-bold mb-3 group-hover:text-blue-600">Personal Finance</h3>
+          <p class="text-gray-700">
+            Budgeting, investing, saving strategies, and financial independence guides.
+          </p>
+          <div class="mt-4 text-blue-600 font-semibold">
+            Browse Articles →
+          </div>
+        </div>
+      </a>
+
+      <a href="/home-improvement" class="group block p-8 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl hover:shadow-xl transition-shadow">
+        <div class="text-center">
+          <div class="text-4xl mb-4">🛠️</div>
+          <h3 class="text-2xl font-bold mb-3 group-hover:text-green-600">Home Improvement</h3>
+          <p class="text-gray-700">
+            DIY projects, repair guides, renovation tips, and tool recommendations.
+          </p>
+          <div class="mt-4 text-green-600 font-semibold">
+            Browse Articles →
+          </div>
+        </div>
+      </a>
+
+      <a href="/health-wellness" class="group block p-8 bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl hover:shadow-xl transition-shadow">
+        <div class="text-center">
+          <div class="text-4xl mb-4">🌿</div>
+          <h3 class="text-2xl font-bold mb-3 group-hover:text-purple-600">Health & Wellness</h3>
+          <p class="text-gray-700">
+            Fitness routines, nutrition advice, mental health tips, and wellness strategies.
+          </p>
+          <div class="mt-4 text-purple-600 font-semibold">
+            Browse Articles →
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="bg-white rounded-2xl p-8 shadow-lg mb-12">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">About Our Content</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="text-3xl mb-4">🤖</div>
+          <h3 class="text-xl font-bold mb-3">AI-Powered</h3>
+          <p class="text-gray-700">
+            Articles generated using advanced AI models, then reviewed and optimized for accuracy.
+          </p>
+        </div>
+        <div>
+          <div class="text-3xl mb-4">🔍</div>
+          <h3 class="text-xl font-bold mb-3">SEO-Optimized</h3>
+          <p class="text-gray-700">
+            Every article is structured for search engines and human readers alike.
+          </p>
+        </div>
+        <div>
+          <div class="text-3xl mb-4">🔄</div>
+          <h3 class="text-xl font-bold mb-3">Regularly Updated</h3>
+          <p class="text-gray-700">
+            Content is refreshed to ensure accuracy and relevance with current information.
+          </p>
+        </div>
+      </div>
+      <p class="text-gray-700 italic">
+        Note: This website demonstrates automated content generation technology. 
+        Articles are created using AI and should be verified with professional advice when appropriate.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

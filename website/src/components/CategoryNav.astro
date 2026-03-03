@@ -1,0 +1,86 @@
+---
+import { articleService } from '../lib/supabase';
+
+// Fetch article counts by niche (this would be dynamic in production)
+// For now, using static data
+const niches = [
+  { name: 'Personal Finance', slug: 'personal-finance', count: 0, color: 'blue' },
+  { name: 'Home Improvement', slug: 'home-improvement', count: 0, color: 'green' },
+  { name: 'Health & Wellness', slug: 'health-wellness', count: 0, color: 'purple' },
+];
+
+// In a real implementation, we would fetch these counts from Supabase
+// const articleCounts = await articleService.getArticleCountsByNiche();
+// niches.forEach(niche => niche.count = articleCounts[niche.name] || 0);
+---
+
+<nav class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">Browse by Category</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {niches.map((niche) => {
+      const colorClasses = {
+        blue: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700',
+        green: 'bg-green-50 hover:bg-green-100 border-green-200 text-green-700',
+        purple: 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700',
+      };
+      
+      const icon = {
+        blue: '💰',
+        green: '🛠️',
+        purple: '🌿',
+      };
+      
+      return (
+        <a
+          href={`/category/${niche.slug}`}
+          class={`block p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${colorClasses[niche.color as keyof typeof colorClasses]}`}
+        >
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">{icon[niche.color as keyof typeof icon]}</span>
+            {niche.count > 0 && (
+              <span class="px-3 py-1 text-sm font-semibold rounded-full bg-white">
+                {niche.count} articles
+              </span>
+            )}
+          </div>
+          
+          <h3 class="text-xl font-bold mb-2">{niche.name}</h3>
+          <p class="text-sm opacity-80">
+            {niche.name === 'Personal Finance' && 'Budgeting, investing, saving strategies'}
+            {niche.name === 'Home Improvement' && 'DIY projects, repair guides, renovation tips'}
+            {niche.name === 'Health & Wellness' && 'Fitness, nutrition, mental health, wellness'}
+          </p>
+          
+          <div class="mt-4 flex items-center text-sm font-semibold">
+            <span>Browse articles</span>
+            <span class="ml-2">→</span>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+  
+  <div class="mt-8 pt-8 border-t border-gray-100">
+    <div class="flex flex-wrap gap-4">
+      <a 
+        href="/all-articles" 
+        class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors"
+      >
+        View All Articles
+      </a>
+      <a 
+        href="/latest" 
+        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+      >
+        Latest Updates
+      </a>
+      <a 
+        href="/popular" 
+        class="px-6 py-3 bg-gray-800 hover:bg-black text-white rounded-lg font-semibold transition-colors"
+      >
+        Most Popular
+      </a>
+    </div>
+  </div>
+</nav>

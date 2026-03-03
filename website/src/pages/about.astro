@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="About Us"
+  description="Learn about our automated content generation system and our mission to provide quality information."
+>
+  <div class="container-narrow">
+    <h1 class="text-4xl font-bold mb-6">About AdSense Automation</h1>
+    
+    <div class="prose prose-lg max-w-none mb-12">
+      <p>
+        Welcome to AdSense Automation, a demonstration of automated content generation technology. 
+        Our platform creates high-quality, SEO-optimized articles using advanced AI models, 
+        then structures and publishes them automatically.
+      </p>
+      
+      <h2>Our Mission</h2>
+      <p>
+        Our goal is to explore the potential of AI-powered content creation while maintaining 
+        high standards of accuracy, relevance, and readability. We believe that automation 
+        can complement human creativity, not replace it.
+      </p>
+      
+      <h2>How It Works</h2>
+      <ol>
+        <li><strong>Keyword Research:</strong> We identify low-competition, high-volume keywords using automated tools.</li>
+        <li><strong>Content Generation:</strong> AI models create articles based on comprehensive research and data.</li>
+        <li><strong>Quality Review:</strong> Automated systems check for accuracy, readability, and SEO optimization.</li>
+        <li><strong>Publication:</strong> Articles are automatically published and indexed for search engines.</li>
+        <li><strong>Monitoring:</strong> Performance is tracked, and content is updated as needed.</li>
+      </ol>
+      
+      <h2>Our Niches</h2>
+      <p>
+        We focus on three primary areas where we believe automated content can provide genuine value:
+      </p>
+      <ul>
+        <li><strong>Personal Finance:</strong> Practical advice on saving, investing, and managing money.</li>
+        <li><strong>Home Improvement:</strong> DIY guides, repair tutorials, and renovation tips.</li>
+        <li><strong>Health & Wellness:</strong> General wellness information, fitness tips, and healthy living advice.</li>
+      </ul>
+      
+      <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-8">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <span class="text-yellow-500 text-xl">⚠️</span>
+          </div>
+          <div class="ml-3">
+            <p class="text-yellow-800">
+              <strong>Important Disclaimer:</strong> This website is an experiment in automated content generation. 
+              Articles are created by AI and should be verified with professional advice when appropriate. 
+              For medical, financial, or legal matters, always consult qualified professionals.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Technology Stack</h2>
+      <p>
+        Our system is built on modern, scalable technologies:
+      </p>
+      <ul>
+        <li><strong>Frontend:</strong> Astro for blazing-fast static site generation</li>
+        <li><strong>Styling:</strong> Tailwind CSS for responsive design</li>
+        <li><strong>Database:</strong> Supabase (PostgreSQL) for content storage</li>
+        <li><strong>Deployment:</strong> Vercel for automatic builds and hosting</li>
+        <li><strong>Automation:</strong> GitHub Actions for CI/CD pipelines</li>
+        <li><strong>AI Models:</strong> Various LLMs for content generation</li>
+      </ul>
+      
+      <h2>Transparency</h2>
+      <p>
+        We believe in transparency about our automated processes. Each article includes a note about 
+        its AI-assisted creation. We continuously monitor and improve our systems to ensure content quality.
+      </p>
+      
+      <p>
+        This project is open-source and available for educational purposes. We welcome feedback 
+        and collaboration from the developer and SEO communities.
+      </p>
+    </div>
+    
+    <div class="bg-gray-50 rounded-xl p-8">
+      <h3 class="text-2xl font-bold mb-4">Contact & Feedback</h3>
+      <p class="mb-4">
+        Have questions or feedback about our automated content system? We'd love to hear from you.
+      </p>
+      <a href="/contact" class="btn btn-primary">
+        Contact Us
+      </a>
+    </div>
+  </div>
+</BaseLayout>
