@@ -37,6 +37,9 @@
 
 ### 6. Dominio Personalizado
 - [ ] **Registrar/Configurar dominio** para producción
+  - [~] **Búsqueda activa**: Verificando `SmartLifeGuides.com` (bloqueado por captcha)
+  - [~] **Alternativas evaluadas**: 10+ dominios .com verificados (todos registrados)
+  - [ ] **Estrategia**: .com prioridad, considerar .net/.org si no disponible
 - [ ] **Configurar DNS** para Vercel
 - [ ] **Implementar SSL/HTTPS**
 
@@ -71,11 +74,16 @@ website/
 
 ## 🚀 Próximos Pasos Inmediatos
 
-1. **Configurar Supabase real** - Necesitamos credenciales para conectar
-2. **Crear más componentes** - Para artículos, categorías, búsqueda
-3. **Implementar generación de contenido** - Scripts para poblar la base de datos
-4. **Configurar dominio** - Para despliegue en producción
-5. **Agregar analytics** - Para monitoreo de tráfico
+1. **Configurar Supabase real** - Script `setup-supabase.py` listo (necesita ejecución)
+2. **Definir dominio final** - Esperando verificación de `SmartLifeGuides.com` o alternativa
+3. **Configurar DNS/Vercel** - Una vez dominio definido
+4. **Generar contenido inicial** - Usar keywords investigadas + LLM
+5. **Implementar analytics** - Google Analytics 4 + monitoreo
+
+### ⏳ En espera (depende del usuario):
+- ✅ **Decisión dominio** (.com vs .net/.org, nombre específico)
+- ✅ **Creación proyecto Supabase** (necesita registro en supabase.com)
+- ✅ **Configuración credenciales** (Vercel, Supabase, APIs)
 
 ## ⚡ Estado Actual
 - **Build:** ✅ Funciona correctamente

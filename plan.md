@@ -116,12 +116,17 @@ Para un sistema Zero-Human-Touch, recomiendo empezar con 3 nichos que combinen:
 - [~] Conectar con Supabase/Firebase
   - Esquema de base de datos diseñado ✓
   - Client de Supabase implementado ✓
+  - Script de setup creado (`setup-supabase.py`) ✓
   - Falta crear proyecto real y credenciales
 - [~] Despliegue automático Vercel + dominio
-  - Configuración lista ✓
-  - Falta configurar dominio personalizado
+  - Configuración lista (Vercel + GitHub Actions) ✓
+  - **Búsqueda dominio activa**: Verificando `SmartLifeGuides.com` (captcha bloqueó)
+  - **Alternativas**: 10+ dominios .com verificados (todos registrados)
+  - **Estrategia**: .com prioridad, .net/.org backup
+  - Falta dominio final y configuración DNS
 - [ ] Implementar sistema de logging/monitoreo
   - Sentry/LogRocket por configurar
+  - Google Analytics 4 por integrar
 
 **📁 Archivos generados (ver `fase1-progreso.md`):**
 - Sitio web Astro completamente funcional
@@ -133,10 +138,15 @@ Para un sistema Zero-Human-Touch, recomiendo empezar con 3 nichos que combinen:
 ---
 
 **Próximos pasos inmediatos:**
-1. Crear proyecto Supabase real y ejecutar schema
-2. Configurar dominio personalizado para producción
-3. Implementar sistema de logging/monitoreo
-4. Crear más páginas dinámicas (categorías, artículos)
-5. Configurar Google Analytics 4
+1. **Decisión dominio** - Verificar `SmartLifeGuides.com` manualmente o elegir alternativa
+2. **Configurar Supabase** - Ejecutar script `setup-supabase.py` (requiere registro)
+3. **Configurar DNS/Vercel** - Una vez dominio definido
+4. **Generar contenido inicial** - Usar keywords investigadas + LLM
+5. **Implementar analytics** - Google Analytics 4 + monitoreo básico
 
-**Estado:** FASE 1 en progreso (60% completado).
+**⏳ Depende del usuario:**
+- Elección dominio final (.com vs .net/.org)
+- Creación cuenta Supabase
+- Configuración credenciales (Vercel, Supabase, APIs)
+
+**Estado:** FASE 1 en progreso (65% completado). **Esperando decisión dominio.**
