@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Privacy Policy"
+  description="Privacy policy for our automated content generation website."
+  noindex={true}
+>
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-4xl font-bold mb-8">Privacy Policy</h1>
+    
+    <div class="prose prose-lg max-w-none">
+      <p class="text-gray-600 mb-6">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      
+      <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8">
+        <p class="text-blue-800">
+          <strong>Note:</strong> This is a template privacy policy for an automated content website. 
+          Consult with legal professionals to ensure compliance with applicable laws.
+        </p>
+      </div>
+      
+      <h2>1. Information We Collect</h2>
+      <p>
+        Our website is primarily an automated content platform. We collect minimal personal information:
+      </p>
+      <ul>
+        <li><strong>Automatically Collected Data:</strong> When you visit our site, we may collect non-personal information such as your IP address, browser type, operating system, referring URLs, and pages visited.</li>
+        <li><strong>Cookies:</strong> We use cookies and similar tracking technologies to analyze trends, administer the website, and gather demographic information.</li>
+        <li><strong>Google Analytics:</strong> We use Google Analytics to understand how visitors interact with our content.</li>
+      </ul>
+      
+      <h2>2. How We Use Your Information</h2>
+      <p>We use the collected information for:</p>
+      <ul>
+        <li>Analyzing website traffic and user behavior</li>
+        <li>Improving content quality and relevance</li>
+        <li>Understanding which articles are most valuable to readers</li>
+        <li>Technical maintenance and security</li>
+      </ul>
+      
+      <h2>3. Third-Party Services</h2>
+      <p>We use the following third-party services:</p>
+      <ul>
+        <li><strong>Google Analytics:</strong> For traffic analysis (see Google's privacy policy)</li>
+        <li><strong>Google AdSense:</strong> For displaying advertisements (see Google's advertising privacy policy)</li>
+        <li><strong>Vercel:</strong> For website hosting and performance monitoring</li>
+        <li><strong>Supabase:</strong> For database storage (content and analytics)</li>
+      </ul>
+      
+      <h2>4. Cookies</h2>
+      <p>
+        Cookies are small files stored on your device. We use cookies to:
+      </p>
+      <ul>
+        <li>Understand user preferences</li>
+        <li>Track anonymous usage statistics</li>
+        <li>Improve website performance</li>
+        <li>Serve relevant advertisements</li>
+      </ul>
+      <p>
+        You can control cookies through your browser settings. Note that disabling cookies may affect some website features.
+      </p>
+      
+      <h2>5. Data Security</h2>
+      <p>
+        We implement reasonable security measures to protect against unauthorized access, alteration, or destruction of data. However, no internet transmission is 100% secure.
+      </p>
+      
+      <h2>6. Children's Privacy</h2>
+      <p>
+        Our website is not intended for children under 13. We do not knowingly collect personal information from children under 13.
+      </p>
+      
+      <h2>7. Automated Content Disclosure</h2>
+      <p>
+        This website uses automated systems and artificial intelligence to generate content. 
+        Articles are created by algorithms and reviewed for quality, but may contain inaccuracies.
+        Always verify important information with authoritative sources.
+      </p>
+      
+      <h2>8. Changes to This Policy</h2>
+      <p>
+        We may update this privacy policy periodically. The "Last updated" date at the top indicates when changes were made.
+      </p>
+      
+      <h2>9. Contact Us</h2>
+      <p>
+        If you have questions about this privacy policy, please contact us through our contact page.
+      </p>
+      
+      <h2>10. Your Rights</h2>
+      <p>
+        Depending on your location, you may have rights regarding your personal data, including:
+      </p>
+      <ul>
+        <li>The right to access your personal information</li>
+        <li>The right to correct inaccurate information</li>
+        <li>The right to request deletion of your data</li>
+        <li>The right to opt-out of data collection</li>
+      </ul>
+      <p>
+        To exercise these rights, please contact us.
+      </p>
+      
+      <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+        <h3 class="text-xl font-bold mb-4">Important Notes</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>This website is an automated system - human review of content is limited</li>
+          <li>We do not sell personal data to third parties</li>
+          <li>We comply with applicable privacy laws and regulations</li>
+          <li>For medical, financial, or legal advice, consult qualified professionals</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="mt-12 pt-8 border-t border-gray-200">
+      <a href="/" class="text-blue-600 hover:text-blue-800 font-medium">← Back to Home</a>
+    </div>
+  </div>
+</BaseLayout>
