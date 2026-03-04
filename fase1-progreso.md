@@ -89,12 +89,14 @@ website/
 
 ## ⚡ Estado Actual
 - **Build:** ✅ Funciona correctamente (6 páginas + sitemap)
-- **Deploy:** 🟡 **EN PROCESO** (Opción A seleccionada: subdominio Vercel)
+- **Deploy:** 🟡 **ESPERANDO VERCEL** (Opción A seleccionada: subdominio Vercel)
 - **Base de datos:** ✅ Esquema ejecutado, conexión verificada (5 tablas)
 - **Contenido:** 🟡 Páginas estáticas + scripts de generación listos
 - **SEO:** ✅ Configuración básica implementada
 - **Legal:** ✅ Privacy Policy + Terms of Service pages
-- **Scripts:** ✅ Setup, test, seed, check, generate_content
+- **Scripts:** ✅ Setup, test, seed, check, generate_content, check-deploy-ready
+- **GitHub:** ✅ **Repositorio configurado** (https://github.com/velcroxlabs/adsense-automation)
+- **Push:** ✅ **Código subido** a GitHub (main branch)
 
-**Progreso estimado:** 90% de FASE 1 completado
-**Próximo paso:** Push a GitHub + Vercel deployment
+**Progreso estimado:** 95% de FASE 1 completado
+**Próximo paso:** Configurar Vercel para deploy automático
