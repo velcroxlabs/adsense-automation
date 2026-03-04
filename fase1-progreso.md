@@ -88,13 +88,13 @@ website/
 - ✅ **Configuración credenciales** (Vercel, Supabase, APIs)
 
 ## ⚡ Estado Actual
-- **Build:** ✅ Funciona correctamente (5 páginas + sitemap)
-- **Deploy:** ✅ Configurado (GitHub Actions + Vercel config)
+- **Build:** ✅ Funciona correctamente (6 páginas + sitemap)
+- **Deploy:** 🟡 **EN PROCESO** (Opción A seleccionada: subdominio Vercel)
 - **Base de datos:** ✅ Esquema ejecutado, conexión verificada (5 tablas)
 - **Contenido:** 🟡 Páginas estáticas + scripts de generación listos
 - **SEO:** ✅ Configuración básica implementada
 - **Legal:** ✅ Privacy Policy + Terms of Service pages
 - **Scripts:** ✅ Setup, test, seed, check, generate_content
 
-**Progreso estimado:** 85% de FASE 1 completado
-**Próximo paso:** Verificación base de datos + decisión despliegue
+**Progreso estimado:** 90% de FASE 1 completado
+**Próximo paso:** Push a GitHub + Vercel deployment

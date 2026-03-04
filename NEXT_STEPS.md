@@ -108,6 +108,13 @@ python scripts/test_supabase.py
 ```
 Check `.env` file credentials.
 
+**Missing Python dependencies (ModuleNotFoundError):**
+```bash
+cd ~/.openclaw/workspace/adsense-automation
+source venv/bin/activate  # Activate virtual environment
+pip install python-dotenv supabase pandas
+```
+
 **Website won't build:**
 ```bash
 cd website
@@ -137,4 +144,6 @@ npm run build
 
 **Last Updated:** 2026-03-04  
 **Project Ready For:** Production deployment  
-**Maintainer:** Jarvis (OpenClaw Assistant)
+**Maintainer:** Jarvis (OpenClaw Assistant)## 🚀 Deploy Strategy Chosen: Opción A (Subdominio Vercel Temporal)
+- **Fecha:** 2026-03-04
+- **Estado:** Proceso de deploy iniciado
