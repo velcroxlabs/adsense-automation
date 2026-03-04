@@ -30,16 +30,18 @@
 ## 🔄 Tareas en Progreso
 
 ### 5. Conexión con Supabase
-- [ ] **Crear proyecto Supabase** y obtener credenciales
-- [ ] **Ejecutar schema SQL** en base de datos
-- [ ] **Configurar variables de entorno** reales
+- [x] **Crear proyecto Supabase** y obtener credenciales ✅ (usuario completado)
+- [~] **Ejecutar schema SQL** en base de datos ⚠️ (pendiente - próximo paso crítico)
+- [x] **Configurar variables de entorno** reales ✅ (credenciales en .env)
 - [ ] **Implementar páginas dinámicas** que consuman datos
+- [x] **Scripts de soporte** ✅ (seed_database.py, check_database.py, generate_content.py)
 
 ### 6. Dominio Personalizado
 - [ ] **Registrar/Configurar dominio** para producción
   - [~] **Búsqueda activa**: Verificando `SmartLifeGuides.com` (bloqueado por captcha)
   - [~] **Alternativas evaluadas**: 10+ dominios .com verificados (todos registrados)
   - [ ] **Estrategia**: .com prioridad, considerar .net/.org si no disponible
+  - [ ] **Opción temporal**: Usar subdominio Vercel (`adsense-auto.vercel.app`)
 - [ ] **Configurar DNS** para Vercel
 - [ ] **Implementar SSL/HTTPS**
 
@@ -86,10 +88,13 @@ website/
 - ✅ **Configuración credenciales** (Vercel, Supabase, APIs)
 
 ## ⚡ Estado Actual
-- **Build:** ✅ Funciona correctamente
-- **Deploy:** ✅ Configurado (necesita credenciales Vercel)
-- **Base de datos:** ⚠️ Schema listo, falta conexión real
-- **Contenido:** ⚠️ Páginas estáticas funcionan, falta contenido dinámico
+- **Build:** ✅ Funciona correctamente (5 páginas + sitemap)
+- **Deploy:** ✅ Configurado (GitHub Actions + Vercel config)
+- **Base de datos:** 🟡 Credenciales OK, falta ejecutar esquema SQL
+- **Contenido:** 🟡 Páginas estáticas + scripts de generación listos
 - **SEO:** ✅ Configuración básica implementada
+- **Legal:** ✅ Privacy Policy + Terms of Service pages
+- **Scripts:** ✅ Setup, test, seed, check, generate_content
 
-**Progreso estimado:** 60% de FASE 1 completado
+**Progreso estimado:** 75% de FASE 1 completado
+**Bloqueador principal:** Ejecución esquema SQL en Supabase
