@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="System Statistics"
+  description="Real-time metrics and performance data for the automated content system."
+  noindex={true}
+>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8">System Statistics & Metrics</h1>
+    
+    <div class="mb-12">
+      <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-8">
+        <h2 class="text-2xl font-bold mb-4">AdSense Automation Dashboard</h2>
+        <p class="opacity-90">
+          Real-time monitoring of automated content generation and monetization performance.
+          This dashboard updates automatically as new data becomes available.
+        </p>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- Metric Card 1 -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div class="text-3xl font-bold text-gray-800 mb-2">1,247</div>
+        <div class="text-gray-600">Articles Published</div>
+        <div class="text-sm text-gray-500 mt-2">+12 this week</div>
+      </div>
+      
+      <!-- Metric Card 2 -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div class="text-3xl font-bold text-gray-800 mb-2">42.5K</div>
+        <div class="text-gray-600">Monthly Sessions</div>
+        <div class="text-sm text-gray-500 mt-2">↑ 8.3% from last month</div>
+      </div>
+      
+      <!-- Metric Card 3 -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+        <div class="text-3xl font-bold text-gray-800 mb-2">$218.50</div>
+        <div class="text-gray-600">Monthly Revenue</div>
+        <div class="text-sm text-gray-500 mt-2">RPM: $18.75</div>
+      </div>
+      
+      <!-- Metric Card 4 -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+        <div class="text-3xl font-bold text-gray-800 mb-2">94.7%</div>
+        <div class="text-gray-600">System Uptime</div>
+        <div class="text-sm text-gray-500 mt-2">Last incident: 2 days ago</div>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+      <!-- Performance by Niche -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-xl font-bold mb-6">Performance by Niche</h3>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Personal Finance</span>
+              <span class="font-bold">$124.80</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full" style="width: 57%"></div>
+            </div>
+            <div class="text-sm text-gray-500 mt-1">57% of total revenue</div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Home Improvement</span>
+              <span class="font-bold">$68.40</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-green-600 h-2 rounded-full" style="width: 31%"></div>
+            </div>
+            <div class="text-sm text-gray-500 mt-1">31% of total revenue</div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium">Health & Wellness</span>
+              <span class="font-bold">$25.30</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-purple-600 h-2 rounded-full" style="width: 12%"></div>
+            </div>
+            <div class="text-sm text-gray-500 mt-1">12% of total revenue</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-xl font-bold mb-6">Recent Activity</h3>
+        <div class="space-y-4">
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+              <span class="text-green-600">✓</span>
+            </div>
+            <div>
+              <div class="font-medium">Article published</div>
+              <div class="text-sm text-gray-500">"How to Save for Retirement" - 2 hours ago</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+              <span class="text-blue-600">↑</span>
+            </div>
+            <div>
+              <div class="font-medium">Traffic spike detected</div>
+              <div class="text-sm text-gray-500">+42% sessions from organic search - 5 hours ago</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+              <span class="text-yellow-600">⚠</span>
+            </div>
+            <div>
+              <div class="font-medium">AdSense CTR drop</div>
+              <div class="text-sm text-gray-500">CTR decreased to 1.2% - Investigating - 1 day ago</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+              <span class="text-purple-600">🔄</span>
+            </div>
+            <div>
+              <div class="font-medium">Content refresh cycle</div>
+              <div class="text-sm text-gray-500">15 articles updated automatically - 2 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- System Status -->
+    <div class="bg-gray-50 rounded-xl p-6 mb-8">
+      <h3 class="text-xl font-bold mb-6">System Status</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center p-4 bg-white rounded-lg">
+          <div class="text-2xl font-bold text-green-600 mb-1">✓</div>
+          <div class="font-medium">Content Generation</div>
+          <div class="text-sm text-gray-500">Operational</div>
+        </div>
+        
+        <div class="text-center p-4 bg-white rounded-lg">
+          <div class="text-2xl font-bold text-green-600 mb-1">✓</div>
+          <div class="font-medium">Database</div>
+          <div class="text-sm text-gray-500">Connected</div>
+        </div>
+        
+        <div class="text-center p-4 bg-white rounded-lg">
+          <div class="text-2xl font-bold text-green-600 mb-1">✓</div>
+          <div class="font-medium">Deployment</div>
+          <div class="text-sm text-gray-500">Vercel Active</div>
+        </div>
+        
+        <div class="text-center p-4 bg-white rounded-lg">
+          <div class="text-2xl font-bold text-yellow-600 mb-1">⚠</div>
+          <div class="font-medium">LLM API</div>
+          <div class="text-sm text-gray-500">Rate limit near</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
+      <h3 class="text-lg font-bold mb-3">About This Dashboard</h3>
+      <p class="text-gray-700 mb-4">
+        This is a demonstration dashboard showing how the automated system would track performance metrics.
+        In a production environment, this data would be pulled from the Supabase database and updated in real-time.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/" class="btn btn-primary">Back to Home</a>
+        <a href="/about" class="btn btn-secondary">Learn About the System</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
