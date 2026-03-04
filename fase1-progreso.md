@@ -31,7 +31,7 @@
 
 ### 5. Conexión con Supabase
 - [x] **Crear proyecto Supabase** y obtener credenciales ✅ (usuario completado)
-- [~] **Ejecutar schema SQL** en base de datos ⚠️ (pendiente - próximo paso crítico)
+- [x] **Ejecutar schema SQL** en base de datos ✅ (usuario completado - 5 tablas creadas)
 - [x] **Configurar variables de entorno** reales ✅ (credenciales en .env)
 - [ ] **Implementar páginas dinámicas** que consuman datos
 - [x] **Scripts de soporte** ✅ (seed_database.py, check_database.py, generate_content.py)
@@ -90,11 +90,11 @@ website/
 ## ⚡ Estado Actual
 - **Build:** ✅ Funciona correctamente (5 páginas + sitemap)
 - **Deploy:** ✅ Configurado (GitHub Actions + Vercel config)
-- **Base de datos:** 🟡 Credenciales OK, falta ejecutar esquema SQL
+- **Base de datos:** ✅ Esquema ejecutado, conexión verificada (5 tablas)
 - **Contenido:** 🟡 Páginas estáticas + scripts de generación listos
 - **SEO:** ✅ Configuración básica implementada
 - **Legal:** ✅ Privacy Policy + Terms of Service pages
 - **Scripts:** ✅ Setup, test, seed, check, generate_content
 
-**Progreso estimado:** 75% de FASE 1 completado
-**Bloqueador principal:** Ejecución esquema SQL en Supabase
+**Progreso estimado:** 85% de FASE 1 completado
+**Próximo paso:** Verificación base de datos + decisión despliegue

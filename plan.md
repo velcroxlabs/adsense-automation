@@ -113,16 +113,18 @@ Para un sistema Zero-Human-Touch, recomiendo empezar con 3 nichos que combinen:
   - Redirects configurados
 
 **🔄 En progreso:**
-- [~] Conectar con Supabase/Firebase
+- [x] Conectar con Supabase/Firebase ✅
   - Esquema de base de datos diseñado ✓
   - Client de Supabase implementado ✓
   - Script de setup creado (`setup-supabase.py`) ✓
-  - Falta crear proyecto real y credenciales
+  - Proyecto creado y credenciales configuradas ✓
+  - **Esquema SQL ejecutado** (5 tablas creadas) ✓
 - [~] Despliegue automático Vercel + dominio
   - Configuración lista (Vercel + GitHub Actions) ✓
   - **Búsqueda dominio activa**: Verificando `SmartLifeGuides.com` (captcha bloqueó)
   - **Alternativas**: 10+ dominios .com verificados (todos registrados)
   - **Estrategia**: .com prioridad, .net/.org backup
+  - **Opción temporal**: Subdominio Vercel listo (`adsense-auto.vercel.app`)
   - Falta dominio final y configuración DNS
 - [ ] Implementar sistema de logging/monitoreo
   - Sentry/LogRocket por configurar
@@ -138,15 +140,17 @@ Para un sistema Zero-Human-Touch, recomiendo empezar con 3 nichos que combinen:
 ---
 
 **Próximos pasos inmediatos:**
-1. **Decisión dominio** - Verificar `SmartLifeGuides.com` manualmente o elegir alternativa
-2. **Configurar Supabase** - Ejecutar script `setup-supabase.py` (requiere registro)
-3. **Configurar DNS/Vercel** - Una vez dominio definido
-4. **Generar contenido inicial** - Usar keywords investigadas + LLM
-5. **Implementar analytics** - Google Analytics 4 + monitoreo básico
+1. **Decisión despliegue** - Subdominio temporal Vercel vs Dominio personalizado
+2. **Despliegue en producción** - Push a GitHub → Vercel auto-deploy
+3. **Seed datos iniciales** (opcional) - `python scripts/seed_database.py`
+4. **Configurar Google Search Console** - Submit sitemap para indexación
+5. **Generar contenido inicial** - Usar keywords investigadas + LLM (necesita API keys)
 
-**⏳ Depende del usuario:**
-- Elección dominio final (.com vs .net/.org)
-- Creación cuenta Supabase
-- Configuración credenciales (Vercel, Supabase, APIs)
+**🚀 Listo para producción:**
+- ✅ Base de datos configurada y verificada
+- ✅ Sitio web build exitoso (5 páginas + SEO)
+- ✅ CI/CD configurado (GitHub Actions → Vercel)
+- ✅ Scripts de automatización listos
+- ✅ Páginas legales requeridas (Privacy Policy, Terms)
 
-**Estado:** FASE 1 en progreso (65% completado). **Esperando decisión dominio.**
+**Estado:** FASE 1 en progreso (85% completado). **¡Listo para deploy!**
