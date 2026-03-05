@@ -8,30 +8,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   canonicalUrl="/"
 >
   <!-- Hero Section -->
-  <section class="text-center py-16 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl mb-12">
-    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-      Quality Content, <span class="text-blue-600">Automated</span>
-    </h1>
-    <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">
-      AI-powered articles on personal finance, home improvement, and health & wellness. 
-      Expertly researched, SEO-optimized, and constantly updated.
-    </p>
-    <div class="flex flex-wrap justify-center gap-4">
-      <a href="/personal-finance" class="btn btn-primary">
-        Personal Finance
-      </a>
-      <a href="/home-improvement" class="btn btn-secondary">
-        Home Improvement
-      </a>
-      <a href="/health-wellness" class="btn btn-secondary">
-        Health & Wellness
-      </a>
+  <section class="text-center py-20 md:py-32 bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl mb-16 overflow-hidden relative">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+    <div class="relative z-10">
+      <h1 class="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+        Practical Wisdom for
+        <span class="block text-teal-400 mt-2">Modern Living</span>
+      </h1>
+      <p class="text-xl text-gray-200 max-w-3xl mx-auto mb-12">
+        Expert insights and actionable guides on personal finance, home improvement, and wellness 
+        to help you live better, smarter, and more intentionally.
+      </p>
+      <div class="flex flex-wrap justify-center gap-6">
+        <a href="/category/personal-finance" class="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition-all hover:shadow-xl hover:-translate-y-1">
+          Explore Finance Guides
+        </a>
+        <a href="/category/home-improvement" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg backdrop-blur-sm transition-all hover:shadow-xl hover:-translate-y-1 border border-white/20">
+          Browse Home Tips
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- Featured Articles -->
-  <section class="mb-16">
-    <h2 class="text-3xl font-bold mb-8 text-center">Recently Published</h2>
+  <section class="mb-20">
+    <div class="flex justify-between items-center mb-12">
+      <div>
+        <h2 class="text-4xl font-bold text-gray-900">Featured Guides</h2>
+        <p class="text-gray-600 mt-2">Handpicked articles with practical advice and expert insights</p>
+      </div>
+      <a href="/category/all" class="text-teal-600 hover:text-teal-700 font-semibold flex items-center">
+        View all articles
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </a>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <!-- Article Card 1 -->
       <article class="card">
@@ -102,81 +114,137 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <!-- Categories -->
-  <section class="mb-16">
-    <h2 class="text-3xl font-bold mb-8 text-center">Explore Categories</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <a href="/personal-finance" class="group block p-8 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl hover:shadow-xl transition-shadow">
-        <div class="text-center">
-          <div class="text-4xl mb-4">💰</div>
-          <h3 class="text-2xl font-bold mb-3 group-hover:text-blue-600">Personal Finance</h3>
-          <p class="text-gray-700">
-            Budgeting, investing, saving strategies, and financial independence guides.
+  <section class="mb-24">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Explore Our Core Topics</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Dive deep into practical guides across our three main areas of expertise
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <a href="/category/personal-finance" class="group relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl p-10 border border-gray-200 hover:border-teal-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="absolute top-6 right-6 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">💼</div>
+        <div class="relative z-10">
+          <div class="inline-flex items-center px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-semibold mb-6">
+            <div class="w-2 h-2 bg-teal-500 rounded-full mr-2"></div>
+            Finance & Money
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Personal Finance Mastery</h3>
+          <p class="text-gray-600 mb-8">
+            From budgeting basics to advanced investment strategies, learn how to build wealth and achieve financial freedom.
           </p>
-          <div class="mt-4 text-blue-600 font-semibold">
-            Browse Articles →
+          <div class="text-teal-600 font-semibold flex items-center">
+            Explore Finance Guides
+            <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
           </div>
         </div>
       </a>
 
-      <a href="/home-improvement" class="group block p-8 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl hover:shadow-xl transition-shadow">
-        <div class="text-center">
-          <div class="text-4xl mb-4">🛠️</div>
-          <h3 class="text-2xl font-bold mb-3 group-hover:text-green-600">Home Improvement</h3>
-          <p class="text-gray-700">
-            DIY projects, repair guides, renovation tips, and tool recommendations.
+      <a href="/category/home-improvement" class="group relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl p-10 border border-gray-200 hover:border-amber-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="absolute top-6 right-6 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">🏠</div>
+        <div class="relative z-10">
+          <div class="inline-flex items-center px-4 py-2 bg-amber-50 text-amber-700 rounded-full text-sm font-semibold mb-6">
+            <div class="w-2 h-2 bg-amber-500 rounded-full mr-2"></div>
+            Home & DIY
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Home Improvement Essentials</h3>
+          <p class="text-gray-600 mb-8">
+            Practical DIY guides, renovation tips, and maintenance advice to transform your living space and save money.
           </p>
-          <div class="mt-4 text-green-600 font-semibold">
-            Browse Articles →
+          <div class="text-amber-600 font-semibold flex items-center">
+            Browse Home Projects
+            <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
           </div>
         </div>
       </a>
 
-      <a href="/health-wellness" class="group block p-8 bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl hover:shadow-xl transition-shadow">
-        <div class="text-center">
-          <div class="text-4xl mb-4">🌿</div>
-          <h3 class="text-2xl font-bold mb-3 group-hover:text-purple-600">Health & Wellness</h3>
-          <p class="text-gray-700">
-            Fitness routines, nutrition advice, mental health tips, and wellness strategies.
+      <a href="/category/health-wellness" class="group relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl p-10 border border-gray-200 hover:border-emerald-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="absolute top-6 right-6 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">🌱</div>
+        <div class="relative z-10">
+          <div class="inline-flex items-center px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-semibold mb-6">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+            Health & Wellness
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Health & Wellness Journey</h3>
+          <p class="text-gray-600 mb-8">
+            Science-backed advice on fitness, nutrition, mental health, and holistic wellness for a balanced life.
           </p>
-          <div class="mt-4 text-purple-600 font-semibold">
-            Browse Articles →
+          <div class="text-emerald-600 font-semibold flex items-center">
+            Discover Wellness Tips
+            <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
           </div>
         </div>
       </a>
     </div>
   </section>
 
-  <!-- About -->
-  <section class="bg-white rounded-2xl p-8 shadow-lg mb-12">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6">About Our Content</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <div>
-          <div class="text-3xl mb-4">🤖</div>
-          <h3 class="text-xl font-bold mb-3">AI-Powered</h3>
-          <p class="text-gray-700">
-            Articles generated using advanced AI models, then reviewed and optimized for accuracy.
+  <!-- Editorial Values -->
+  <section class="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-12 mb-20">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Editorial Commitment</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Every piece of content on InsightHub is crafted with these core principles in mind
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Expertly Researched</h3>
+          <p class="text-gray-600">
+            Our team synthesizes information from authoritative sources to provide reliable, actionable insights.
           </p>
         </div>
-        <div>
-          <div class="text-3xl mb-4">🔍</div>
-          <h3 class="text-xl font-bold mb-3">SEO-Optimized</h3>
-          <p class="text-gray-700">
-            Every article is structured for search engines and human readers alike.
+        <div class="text-center">
+          <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Practical & Actionable</h3>
+          <p class="text-gray-600">
+            We focus on real-world application, providing steps you can implement immediately for tangible results.
           </p>
         </div>
-        <div>
-          <div class="text-3xl mb-4">🔄</div>
-          <h3 class="text-xl font-bold mb-3">Regularly Updated</h3>
-          <p class="text-gray-700">
-            Content is refreshed to ensure accuracy and relevance with current information.
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Timely Updates</h3>
+          <p class="text-gray-600">
+            Content is regularly reviewed and refreshed to reflect the latest information and best practices.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Community Focused</h3>
+          <p class="text-gray-600">
+            Our content is designed to address real questions and challenges faced by our readers.
           </p>
         </div>
       </div>
-      <p class="text-gray-700 italic">
-        Note: This website demonstrates automated content generation technology. 
-        Articles are created using AI and should be verified with professional advice when appropriate.
-      </p>
+      <div class="text-center mt-12 pt-8 border-t border-gray-200">
+        <p class="text-gray-600 italic">
+          We believe in providing valuable insights that empower you to make informed decisions 
+          and take meaningful steps toward your goals.
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
