@@ -1,9 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-// Get the slug from the URL
-const { slug } = Astro.params;
-
 // Map slugs to category data
 const categories = {
   'personal-finance': {
@@ -28,6 +25,41 @@ const categories = {
     metaDescription: 'Improve your wellbeing with our health and wellness guides covering fitness, nutrition, mental health, and holistic practices.'
   }
 };
+
+// Export getStaticPaths for static generation
+export async function getStaticPaths() {
+  // Define categories here so it's available during build
+  const categories = {
+    'personal-finance': {
+      name: 'Personal Finance',
+      description: 'Expert guides on budgeting, investing, saving strategies, and achieving financial freedom.',
+      color: 'teal',
+      icon: '💼',
+      metaDescription: 'Learn how to manage your money effectively with our comprehensive personal finance guides and investment strategies.'
+    },
+    'home-improvement': {
+      name: 'Home Improvement', 
+      description: 'Practical DIY projects, repair guides, renovation tips, and home maintenance advice.',
+      color: 'amber',
+      icon: '🏠',
+      metaDescription: 'Transform your living space with our step-by-step home improvement guides, DIY projects, and renovation tips.'
+    },
+    'health-wellness': {
+      name: 'Health & Wellness',
+      description: 'Science-backed advice on fitness, nutrition, mental health, and holistic wellness practices.',
+      color: 'emerald',
+      icon: '🌱',
+      metaDescription: 'Improve your wellbeing with our health and wellness guides covering fitness, nutrition, mental health, and holistic practices.'
+    }
+  };
+  
+  return Object.keys(categories).map((slug) => ({
+    params: { slug }
+  }));
+}
+
+// Get the slug from the URL
+const { slug } = Astro.params;
 
 // Get category data or show 404
 const category = categories[slug as keyof typeof categories];
