@@ -136,60 +136,71 @@ const articles: CategoryArticle[] = [
   description={active.metaDescription}
   canonicalUrl={`/category/${activeSlug}`}
 >
-  <div class="editorial-paper editorial-ink min-h-screen selection:bg-amber-100">
+  <div class="editorial-paper editorial-ink min-h-screen selection:bg-amber-200">
     <nav
       data-nav
-      class="fixed inset-x-0 top-0 z-50 bg-transparent py-8 transition-all duration-500"
+      class="fixed inset-x-0 top-0 z-50 bg-transparent py-6 transition-all duration-500"
     >
-      <div class="container mx-auto flex items-center justify-between px-8">
-        <a
-          href="/"
-          class="font-sans text-[32px] font-black uppercase tracking-[-0.03em]"
-        >
-          Insight<span class="text-amber-600">Hub</span>
-        </a>
-
-        <div
-          class="hidden gap-10 font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400 lg:flex"
-        >
-          {(Object.keys(categories) as CategoryKey[]).map((key) => (
-            <a
-              href={`/category/${key}`}
-              class={`transition-colors hover:text-black ${activeSlug === key ? "text-black" : ""}`}
+      <div class="container mx-auto flex items-center justify-between px-6">
+        <div class="flex items-center gap-8">
+          <a
+            href="/"
+            class="flex items-center gap-1 font-sans text-3xl font-black leading-none tracking-[-0.02em]"
+          >
+            INSIGHT<span
+              class="text-amber-600 underline decoration-2 underline-offset-4"
+              >HUB</span
             >
-              {categories[key].name}
-            </a>
-          ))}
+          </a>
+
+          <div
+            class="hidden gap-8 font-sans text-[13px] font-semibold uppercase tracking-[0.22em] text-gray-500 lg:flex"
+          >
+            {(Object.keys(categories) as CategoryKey[]).map((key) => (
+              <a
+                href={`/category/${key}`}
+                class={`transition-colors hover:text-amber-600 ${activeSlug === key ? "text-amber-600" : ""}`}
+              >
+                {categories[key].name}
+              </a>
+            ))}
+          </div>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-5">
           <button
             type="button"
-            class="rounded-full p-2 transition-colors hover:bg-black/5"
+            class="rounded-full p-2 transition-colors hover:bg-gray-100"
             aria-label="Search"
           >
             <svg
-              class="h-[18px] w-[18px]"
+              class="h-5 w-5"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="1.8"
+              stroke-width="1.5"
             >
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
           <button
+            type="button"
+            class="editorial-ink-bg hidden rounded-full px-8 py-3 font-sans text-[12px] font-bold tracking-[0.08em] text-white transition-all hover:bg-amber-600 md:block"
+          >
+            SUBSCRIBE
+          </button>
+          <button
             data-mobile-toggle
             type="button"
-            class="rounded-full p-2 transition-colors hover:bg-black/5 lg:hidden"
+            class="lg:hidden"
             aria-expanded="false"
             aria-controls="mobile-category-nav"
             aria-label="Open menu"
           >
             <svg
               data-menu-icon
-              class="h-[18px] w-[18px]"
+              class="h-6 w-6"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -201,7 +212,7 @@ const articles: CategoryArticle[] = [
             </svg>
             <svg
               data-close-icon
-              class="hidden h-[18px] w-[18px]"
+              class="hidden h-6 w-6"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -217,18 +228,28 @@ const articles: CategoryArticle[] = [
       <div
         id="mobile-category-nav"
         data-mobile-menu
-        class="container mx-auto hidden px-8 pb-4 pt-4 lg:hidden"
+        class="container mx-auto hidden px-6 pb-4 pt-4 lg:hidden"
       >
-        <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div class="flex flex-col gap-4">
+        <div
+          class="rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-sm backdrop-blur"
+        >
+          <div
+            class="flex flex-col gap-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-gray-700"
+          >
             {(Object.keys(categories) as CategoryKey[]).map((key) => (
               <a
                 href={`/category/${key}`}
-                class={`font-sans text-[11px] font-bold uppercase tracking-[0.2em] transition-colors hover:text-black ${activeSlug === key ? "text-black" : "text-gray-500"}`}
+                class={`transition-colors hover:text-amber-600 ${activeSlug === key ? "text-amber-600" : ""}`}
               >
                 {categories[key].name}
               </a>
             ))}
+            <a href="/about" class="transition-colors hover:text-amber-600"
+              >About</a
+            >
+            <a href="/contact" class="transition-colors hover:text-amber-600"
+              >Contact</a
+            >
           </div>
         </div>
       </div>
@@ -497,12 +518,12 @@ const articles: CategoryArticle[] = [
       if (nav) {
         const updateNav = () => {
           const scrolled = window.scrollY > 50;
-          nav.classList.toggle("bg-white/90", scrolled);
+          nav.classList.toggle("bg-white/80", scrolled);
           nav.classList.toggle("backdrop-blur-md", scrolled);
-          nav.classList.toggle("py-4", scrolled);
+          nav.classList.toggle("py-3", scrolled);
           nav.classList.toggle("shadow-sm", scrolled);
           nav.classList.toggle("bg-transparent", !scrolled);
-          nav.classList.toggle("py-8", !scrolled);
+          nav.classList.toggle("py-6", !scrolled);
         };
         updateNav();
         window.addEventListener("scroll", updateNav, { passive: true });
