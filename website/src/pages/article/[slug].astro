@@ -1,0 +1,374 @@
+---
+import ContentLayout from "../../layouts/ContentLayout.astro";
+
+type NicheMeta = {
+  label: string;
+  accentBg: string;
+  accentText: string;
+  accentBorder: string;
+  categorySlug: string;
+};
+
+type ArticleRecord = {
+  title: string;
+  excerpt: string;
+  slug: string;
+  published_at: string;
+  image: string;
+  keywords: {
+    seed_niche: string;
+  };
+  metadata: {
+    word_count: number;
+  };
+};
+
+const articleLibrary: ArticleRecord[] = [
+  {
+    title: "The Future of Wealth Management in the Digital Era",
+    excerpt:
+      "Exploring how decentralized systems and automated intelligence are reshaping the global financial landscape for the next generation of investors.",
+    slug: "future-of-wealth",
+    published_at: "2026-03-01T09:00:00.000Z",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bbda48242ad8?auto=format&fit=crop&q=80&w=1600",
+    keywords: { seed_niche: "personal finance" },
+    metadata: { word_count: 2400 },
+  },
+  {
+    title: "Quiet Luxury Interiors: Systems for Timeless Spaces",
+    excerpt:
+      "A practical framework for blending minimalist aesthetics, functionality, and long-term material quality in home design.",
+    slug: "quiet-luxury-interiors",
+    published_at: "2026-02-20T09:00:00.000Z",
+    image:
+      "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&q=80&w=1600",
+    keywords: { seed_niche: "home improvement" },
+    metadata: { word_count: 2100 },
+  },
+  {
+    title: "Performance Longevity: A New Health Operating Model",
+    excerpt:
+      "How to build a repeatable, evidence-backed health system for energy, cognition, and long-term resilience.",
+    slug: "performance-longevity-model",
+    published_at: "2026-02-10T09:00:00.000Z",
+    image:
+      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1600",
+    keywords: { seed_niche: "health wellness" },
+    metadata: { word_count: 2300 },
+  },
+];
+
+export async function getStaticPaths() {
+  const slugs = [
+    "future-of-wealth",
+    "quiet-luxury-interiors",
+    "performance-longevity-model",
+  ];
+
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const article = articleLibrary.find((entry) => entry.slug === slug);
+
+if (!article) {
+  return Astro.redirect("/404");
+}
+
+const getNicheMeta = (niche: string): NicheMeta => {
+  const normalized = niche.toLowerCase();
+
+  if (normalized.includes("finance")) {
+    return {
+      label: "Wealth Management",
+      accentBg: "bg-amber-600",
+      accentText: "text-amber-600",
+      accentBorder: "border-amber-600",
+      categorySlug: "personal-finance",
+    };
+  }
+
+  if (normalized.includes("home")) {
+    return {
+      label: "Interior Design",
+      accentBg: "bg-stone-600",
+      accentText: "text-stone-600",
+      accentBorder: "border-stone-600",
+      categorySlug: "home-improvement",
+    };
+  }
+
+  if (normalized.includes("health") || normalized.includes("wellness")) {
+    return {
+      label: "Longevity Science",
+      accentBg: "bg-emerald-700",
+      accentText: "text-emerald-700",
+      accentBorder: "border-emerald-700",
+      categorySlug: "health-wellness",
+    };
+  }
+
+  return {
+    label: "Perspective",
+    accentBg: "bg-gray-500",
+    accentText: "text-gray-500",
+    accentBorder: "border-gray-500",
+    categorySlug: "personal-finance",
+  };
+};
+
+const meta = getNicheMeta(article.keywords.seed_niche);
+const readTime = article.metadata?.word_count
+  ? Math.ceil(article.metadata.word_count / 200)
+  : 5;
+const publishDate = article.published_at
+  ? new Date(article.published_at).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
+  : "Recent Edition";
+
+const tags = ["Strategy", "Innovation", article.keywords.seed_niche, "Analysis"];
+---
+
+<ContentLayout
+  title={article.title}
+  description={article.excerpt}
+  canonicalUrl={`/article/${article.slug}`}
+>
+  <div class="editorial-ink min-h-screen bg-white font-serif selection:bg-amber-100">
+    <div class="fixed left-0 top-0 z-50 h-1 w-full bg-gray-100">
+      <div
+        id="reading-progress"
+        class={`h-full ${meta.accentBg} transition-all duration-150`}
+        style="width: 0%;"
+      ></div>
+    </div>
+
+    <nav class="sticky top-0 z-40 border-b border-gray-100 bg-white/90 px-6 py-4 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between">
+        <a
+          href={`/category/${meta.categorySlug}`}
+          class="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-widest transition-colors hover:text-amber-600"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Library
+        </a>
+        <div class="hidden max-w-[55vw] truncate font-sans text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 md:block">
+          {meta.label}
+          <span class="mx-2 inline-block align-middle text-[10px]">&rsaquo;</span>
+          {article.title}
+        </div>
+        <div class="flex gap-4">
+          <button type="button" class="rounded-full p-2 transition-colors hover:bg-gray-50" aria-label="Bookmark article">
+            <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
+          <button type="button" class="rounded-full p-2 transition-colors hover:bg-gray-50" aria-label="Share article">
+            <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-24">
+      <header class="mx-auto mb-16 max-w-4xl text-center lg:mb-24">
+        <div class="mb-8 inline-block rounded-full border border-gray-200 px-4 py-1.5">
+          <span class="font-sans text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
+            {meta.label}
+          </span>
+        </div>
+        <h1 class="mb-10 text-4xl font-bold italic leading-[1.1] tracking-tight md:text-6xl lg:text-7xl">
+          {article.title}
+        </h1>
+        <p class="mb-12 text-xl font-light leading-relaxed text-gray-500 md:text-2xl">
+          {article.excerpt}
+        </p>
+        <div class="flex flex-col items-center justify-center gap-6 border-b border-t border-gray-100 py-8 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 md:flex-row">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+              <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21a8 8 0 1 0-16 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <span class="text-black">Editorial Staff</span>
+          </div>
+          <div class="hidden h-4 w-[1px] bg-gray-200 md:block"></div>
+          <div class="flex items-center gap-2">
+            <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            {readTime} MINUTE READ
+          </div>
+          <div class="hidden h-4 w-[1px] bg-gray-200 md:block"></div>
+          <div>{publishDate}</div>
+        </div>
+      </header>
+
+      <div class="mb-20 w-full lg:mb-32">
+        <div class="aspect-[16/9] overflow-hidden rounded-sm bg-gray-100 xl:aspect-[21/9]">
+          <img
+            src={article.image}
+            class="h-full w-full object-cover"
+            alt="Article hero"
+            loading="eager"
+            referrerpolicy="no-referrer"
+          />
+        </div>
+        <p class="mt-4 text-center font-sans text-[10px] italic uppercase tracking-widest text-gray-400">
+          Illustration of strategic frameworks within the {meta.label.toLowerCase()} landscape.
+        </p>
+      </div>
+
+      <div class="relative grid grid-cols-1 gap-12 lg:grid-cols-9 lg:gap-8">
+        <aside class="sticky top-32 hidden h-fit lg:col-span-2 lg:block">
+          <div class="flex flex-col gap-8 border-r border-gray-50 pr-8 text-gray-300">
+            <button type="button" class="flex flex-col items-center gap-1 transition-colors hover:text-amber-600" aria-label="Like article">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 9V5a3 3 0 0 0-3-3l-1 4-3 5v10h11.28a2 2 0 0 0 2-1.73l1-7A2 2 0 0 0 19.3 10H14z"></path>
+                <path d="M7 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3"></path>
+              </svg>
+              <span class="font-sans text-[9px] font-bold">1.2K</span>
+            </button>
+            <button type="button" class="flex flex-col items-center gap-1 transition-colors hover:text-amber-600" aria-label="Comments">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span class="font-sans text-[9px] font-bold">48</span>
+            </button>
+            <div class="my-2 h-[1px] w-full bg-gray-100"></div>
+            <button type="button" class="flex flex-col items-center gap-1 transition-colors hover:text-blue-400" aria-label="Share on Twitter">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 16.5 3a4.5 4.5 0 0 0-4.5 4.5c0 .35.04.7.12 1.03A12.94 12.94 0 0 1 3 4s-4 9 5 13a13.2 13.2 0 0 1-7 2c9 5 20 0 20-11.5 0-.18 0-.37-.01-.55A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </button>
+            <button type="button" class="flex flex-col items-center gap-1 transition-colors hover:text-blue-700" aria-label="Share on LinkedIn">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </button>
+            <button type="button" class="flex flex-col items-center gap-1 transition-colors hover:text-black" aria-label="Copy link">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L11.3 5.64"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l2.17-2.17"></path>
+              </svg>
+            </button>
+          </div>
+        </aside>
+
+        <article class="min-w-0 w-full max-w-none lg:col-span-8 lg:col-start-4">
+          <div class="prose prose-lg prose-stone max-w-none space-y-8 text-lg leading-[1.8] text-gray-700 md:text-2xl">
+            <p class={`first-letter:float-left first-letter:mr-3 first-letter:mt-2 first-letter:text-7xl first-letter:font-bold ${meta.accentText}`}>
+              In the current climate of rapid evolution, understanding the fundamental pillars of {meta.label.toLowerCase()} is no longer optional. It is a prerequisite for those who intend to maintain a competitive advantage while fostering sustainable growth and architectural integrity in their personal or professional spheres.
+            </p>
+            <h2 class="mb-8 mt-16 text-3xl font-bold italic text-black">The Paradigm Shift</h2>
+            <p>
+              As we look toward the mid-decade mark, we observe a significant recalibration of value systems. It is not merely about the accumulation of assets or the aesthetic refinement of a space; it is about the integration of these elements into a cohesive life-system that supports cognitive performance and high-level vitality.
+            </p>
+            <blockquote class={`my-12 border-l-4 py-2 pl-8 ${meta.accentBorder}`}>
+              <p class="text-2xl font-bold italic leading-tight text-black lg:text-3xl">
+                "Excellence is not an act, but a systemic habit. In the realm of {article.keywords.seed_niche}, systems always outperform individual efforts."
+              </p>
+              <cite class="mt-4 block font-sans text-[10px] font-black uppercase tracking-widest text-gray-400">- Chief Editorial Officer</cite>
+            </blockquote>
+            <h2 class="mb-8 mt-16 text-3xl font-bold italic text-black">Implementing Core Frameworks</h2>
+            <p>
+              To achieve the desired results, one must move beyond introductory concepts and begin the arduous but rewarding work of implementing advanced methodologies. This includes a rigorous audit of current practices and a relentless focus on the 20% of actions that yield 80% of desired outcomes.
+            </p>
+            <ul class="my-10 list-none space-y-4 pl-0">
+              {[
+                "Analysis of baseline performance metrics",
+                "Systematic elimination of friction points",
+                "Introduction of compounding growth habits",
+              ].map((item, i) => (
+                <li class="flex items-start gap-4">
+                  <span class={`font-bold ${meta.accentText}`}>0{i + 1}.</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p>
+              In conclusion, the path to mastery in this domain is paved with deliberate practice and informed decision-making. By adhering to the frameworks outlined in this report, readers can expect to see a marked improvement in both their immediate output and their long-term strategic positioning.
+            </p>
+          </div>
+          <div class="mt-20 flex flex-wrap gap-4 border-t border-gray-100 pt-10">
+            {tags.map((tag) => (
+              <span class="rounded-sm bg-gray-50 px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <section class="mt-20 bg-stone-900 px-6 py-24 text-white">
+      <div class="mx-auto max-w-4xl text-center">
+        <h2 class="mb-8 text-4xl font-bold italic md:text-5xl">Subscribe to the Insight Brief.</h2>
+        <p class="mx-auto mb-12 max-w-2xl text-lg text-stone-400">
+          Weekly executive summaries on {meta.label.toLowerCase()} and strategic excellence, delivered to your inbox every Sunday morning.
+        </p>
+        <div class="mx-auto flex max-w-lg flex-col gap-4 md:flex-row">
+          <input
+            type="email"
+            placeholder="Email address"
+            class="flex-1 rounded-sm border-none bg-stone-800 px-6 py-4 font-sans text-sm text-white outline-none focus:ring-2 focus:ring-amber-600"
+          />
+          <button
+            type="button"
+            class="bg-amber-600 px-8 py-4 font-sans text-[10px] font-black uppercase tracking-widest transition-colors hover:bg-amber-700"
+          >
+            Join the Circle
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="border-t border-gray-100 py-12 text-center">
+      <p class="font-sans text-[9px] font-black uppercase tracking-[0.5em] text-gray-300">
+        InsightHub Editorial Group &bull; MMXXIV
+      </p>
+    </footer>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const progress = document.getElementById("reading-progress");
+
+      const updateScrollProgress = () => {
+        if (!progress) return;
+
+        const currentScroll = window.scrollY;
+        const scrollHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+
+        const percentage = scrollHeight
+          ? Math.min(100, (currentScroll / scrollHeight) * 100)
+          : 0;
+
+        progress.style.width = `${percentage}%`;
+      };
+
+      updateScrollProgress();
+      window.addEventListener("scroll", updateScrollProgress, { passive: true });
+    })();
+  </script>
+</ContentLayout>
