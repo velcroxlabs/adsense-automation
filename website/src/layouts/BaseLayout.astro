@@ -17,6 +17,50 @@ const {
   ogImage = '/default-og.jpg',
   noindex = false
 } = Astro.props;
+
+const categories = [
+  { label: 'Personal Finance', href: '/category/personal-finance' },
+  { label: 'Home Improvement', href: '/category/home-improvement' },
+  { label: 'Health & Wellness', href: '/category/health-wellness' },
+  { label: 'Executive Leadership', href: '/about' },
+  { label: 'Technology', href: '/stats' },
+];
+
+const featuredPosts = [
+  {
+    id: 1,
+    category: 'Personal Finance',
+    title: 'The Architecture of Wealth: Strategic Asset Allocation in 2024',
+    excerpt: 'Moving beyond simple diversification to build a resilient portfolio in a volatile global economy.',
+    author: 'Julianne Vane',
+    date: 'Mar 12, 2024',
+    readTime: '8 min read',
+    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800',
+    href: '/category/personal-finance',
+  },
+  {
+    id: 2,
+    category: 'Health & Wellness',
+    title: 'Biohacking the Circadian Rhythm for Peak Performance',
+    excerpt: 'How light exposure and nutrient timing can redefine your biological clock and daily energy levels.',
+    author: 'Dr. Marcus Thorne',
+    date: 'Mar 10, 2024',
+    readTime: '12 min read',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800',
+    href: '/category/health-wellness',
+  },
+  {
+    id: 3,
+    category: 'Home Improvement',
+    title: 'Minimalist Aesthetics: The Psychology of Quiet Luxury in Design',
+    excerpt: 'Why less is more when it comes to creating a sanctuary that promotes mental clarity.',
+    author: 'Elena Rossi',
+    date: 'Mar 08, 2024',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=800',
+    href: '/category/home-improvement',
+  },
+];
 ---
 
 <!DOCTYPE html>
@@ -60,66 +104,354 @@ const {
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-gray-50 text-gray-900 font-sans min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-100">
-      <nav class="container mx-auto px-4 py-5">
-        <div class="flex justify-between items-center">
-          <a href="/" class="text-2xl font-bold text-gray-900">
-            Insight<span class="text-teal-600">Hub</span>
+  <body class="min-h-screen bg-[#faf9f6] text-[#1a1a1a] selection:bg-amber-200">
+    <nav
+      data-nav
+      class="fixed inset-x-0 top-0 z-50 bg-transparent py-6 transition-all duration-500"
+    >
+      <div class="container mx-auto flex items-center justify-between px-6">
+        <div class="flex items-center gap-8">
+          <a href="/" class="flex items-center gap-1 text-2xl font-black tracking-tighter">
+            INSIGHT<span class="text-amber-600 underline decoration-2 underline-offset-4">HUB</span>
           </a>
-          <div class="hidden md:flex space-x-10">
-            <a href="/category/personal-finance" class="text-gray-700 hover:text-teal-600 font-medium transition-colors">Personal Finance</a>
-            <a href="/category/home-improvement" class="text-gray-700 hover:text-teal-600 font-medium transition-colors">Home Improvement</a>
-            <a href="/category/health-wellness" class="text-gray-700 hover:text-teal-600 font-medium transition-colors">Health & Wellness</a>
-            <a href="/about" class="text-gray-700 hover:text-teal-600 font-medium transition-colors">About</a>
-            <a href="/contact" class="text-gray-700 hover:text-teal-600 font-medium transition-colors">Contact</a>
+          <div class="hidden gap-6 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 lg:flex">
+            {categories.slice(0, 3).map((cat) => (
+              <a href={cat.href} class="transition-colors hover:text-amber-600">
+                {cat.label}
+              </a>
+            ))}
           </div>
         </div>
-      </nav>
-    </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-      <slot />
+        <div class="flex items-center gap-5">
+          <button
+            type="button"
+            class="rounded-full p-2 transition-colors hover:bg-gray-100"
+            aria-label="Search"
+          >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="hidden rounded-full bg-[#1a1a1a] px-6 py-2.5 text-xs font-bold tracking-wider text-white transition-all hover:bg-amber-600 md:block"
+          >
+            SUBSCRIBE
+          </button>
+          <button data-mobile-toggle type="button" class="lg:hidden" aria-expanded="false" aria-controls="mobile-nav">
+            <svg data-menu-icon class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <svg data-close-icon class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobile-nav" data-mobile-menu class="container mx-auto hidden px-6 pb-4 pt-4 lg:hidden">
+        <div class="rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-sm backdrop-blur">
+          <div class="flex flex-col gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-gray-700">
+            {categories.map((cat) => (
+              <a href={cat.href} class="transition-colors hover:text-amber-600">{cat.label}</a>
+            ))}
+            <a href="/about" class="transition-colors hover:text-amber-600">About</a>
+            <a href="/contact" class="transition-colors hover:text-amber-600">Contact</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section class="px-6 pb-16 pt-32">
+        <div class="container mx-auto">
+          <div class="mb-16 flex flex-col items-end gap-12 lg:flex-row">
+            <div class="lg:w-2/3">
+              <span class="mb-6 inline-block rounded-sm bg-amber-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-800">
+                Editorial Choice
+              </span>
+              <h1 class="mb-8 text-5xl font-bold italic leading-[1.1] tracking-tight md:text-7xl">
+                Refining the art of <br />
+                <span class="not-italic font-black">Modern Living.</span>
+              </h1>
+              <p class="max-w-xl text-xl leading-relaxed text-gray-600">
+                Expert-led perspectives on the intersection of personal growth, financial mastery, and sophisticated lifestyle design.
+              </p>
+            </div>
+            <div class="flex lg:w-1/3 lg:justify-end">
+              <div class="flex items-center gap-4 text-sm text-gray-400">
+                <div class="h-[1px] w-12 bg-gray-300"></div>
+                <span>ESTABLISHED 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2">
+            <div class="flex flex-col lg:flex-row">
+              <div class="overflow-hidden lg:w-3/5">
+                <img
+                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200"
+                  alt="Modern skyline and architecture"
+                  class="h-[400px] w-full object-cover transition-transform duration-1000 group-hover:scale-105 lg:h-[600px]"
+                />
+              </div>
+              <div class="flex flex-col justify-center p-8 lg:w-2/5 lg:p-16">
+                <div class="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-600">
+                  <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                    <polyline points="17 6 23 6 23 12"></polyline>
+                  </svg>
+                  Trending in Finance
+                </div>
+                <h2 class="mb-6 cursor-pointer text-3xl font-bold transition-colors hover:text-amber-600 lg:text-4xl">
+                  The New Economics of Sustainable Luxury
+                </h2>
+                <p class="mb-8 leading-relaxed text-gray-500">
+                  How high-net-worth individuals are shifting their consumption habits towards longevity and ethical craftsmanship over traditional status symbols.
+                </p>
+                <div class="mt-auto flex items-center justify-between border-t border-gray-100 pt-8">
+                  <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+                      <img src="https://i.pravatar.cc/150?u=1" alt="Author avatar" loading="lazy" />
+                    </div>
+                    <div>
+                      <p class="text-sm font-bold">Alexander Pierce</p>
+                      <p class="text-xs text-gray-400">Editor-in-Chief</p>
+                    </div>
+                  </div>
+                  <a href="/about" class="flex items-center gap-1 text-xs font-bold tracking-widest transition-transform group-hover:translate-x-2">
+                    READ STORY
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white py-24">
+        <div class="container mx-auto px-6">
+          <div class="mb-16 flex items-end justify-between">
+            <div>
+              <h3 class="mb-4 text-xs font-black uppercase tracking-[0.3em] text-gray-400">LATEST INSIGHTS</h3>
+              <h2 class="text-4xl font-bold">Curated Reading</h2>
+            </div>
+            <a href="/stats" class="border-b-2 border-black pb-1 text-sm font-bold transition-all hover:border-amber-600 hover:text-amber-600">
+              VIEW ARCHIVE
+            </a>
+          </div>
+
+          <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {featuredPosts.map((post) => (
+              <article class="group cursor-pointer">
+                <a href={post.href} class="block">
+                  <div class="relative mb-6 aspect-[4/5] overflow-hidden rounded-xl">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      loading="lazy"
+                      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div class="absolute left-4 top-4">
+                      <span class="rounded bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                        {post.category}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      class="absolute bottom-4 right-4 rounded-full bg-white/20 p-3 text-white opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100"
+                      aria-label="Bookmark article"
+                    >
+                      <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="mb-3 flex items-center gap-4 text-[10px] uppercase tracking-widest text-gray-400">
+                    <span class="flex items-center gap-1">
+                      <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      {post.readTime}
+                    </span>
+                    <span>&bull;</span>
+                    <span>{post.date}</span>
+                  </div>
+                  <h4 class="mb-3 text-2xl font-bold leading-tight transition-colors group-hover:text-amber-700">
+                    {post.title}
+                  </h4>
+                  <p class="line-clamp-3 leading-relaxed text-gray-500">
+                    {post.excerpt}
+                  </p>
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="relative overflow-hidden bg-[#1a1a1a] py-24 text-white">
+        <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-amber-600/10 to-transparent"></div>
+        <div class="container relative z-10 mx-auto px-6 text-center">
+          <svg class="mx-auto mb-8 text-amber-500" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M4 4h16v16H4z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <h2 class="mb-6 text-4xl font-bold md:text-5xl">The Sunday Briefing</h2>
+          <p class="mx-auto mb-10 max-w-2xl text-lg italic text-gray-400">
+            "A weekly curation of high-impact ideas for those who value time and intellect. Join 50,000+ subscribers who receive our exclusive analysis."
+          </p>
+          <div class="mx-auto flex max-w-md flex-col gap-4 sm:flex-row">
+            <input
+              type="email"
+              placeholder="Your email address"
+              class="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-4 focus:border-amber-500 focus:outline-none transition-colors"
+            />
+            <button
+              type="button"
+              class="whitespace-nowrap rounded-full bg-white px-8 py-4 font-bold text-black transition-all hover:bg-amber-500 hover:text-white"
+            >
+              JOIN NOW
+            </button>
+          </div>
+          <p class="mt-6 text-xs uppercase tracking-widest text-gray-500">
+            No spam. No noise. Just insight.
+          </p>
+        </div>
+      </section>
+
+      <section class="bg-white py-16">
+        <div class="container mx-auto px-6">
+          <slot />
+        </div>
+      </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white mt-16">
-      <div class="container mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div class="md:col-span-2">
-            <h3 class="text-2xl font-bold mb-6">Insight<span class="text-teal-400">Hub</span></h3>
-            <p class="text-gray-300 max-w-md text-lg">
-              Practical wisdom and expert insights to help you master personal finance, home improvement, and wellness.
+    <footer class="border-t border-white/5 bg-[#121212] text-white">
+      <div class="container mx-auto px-6 py-20">
+        <div class="mb-20 grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-4">
+          <div class="lg:col-span-1">
+            <a href="/" class="mb-8 block text-2xl font-black tracking-tighter">
+              INSIGHT<span class="text-amber-500">HUB</span>
+            </a>
+            <p class="text-sm italic leading-relaxed text-gray-500">
+              Elevating the standard of online editorial. We believe in depth, nuance, and the pursuit of excellence in every facet of life.
             </p>
+            <div class="mt-8 flex gap-4">
+              <a href="https://x.com" class="rounded-full border border-white/10 p-2 transition-all hover:bg-white hover:text-black" aria-label="Twitter">
+                <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 16.5 3a4.5 4.5 0 0 0-4.5 4.5c0 .35.04.7.12 1.03A12.94 12.94 0 0 1 3 4s-4 9 5 13a13.2 13.2 0 0 1-7 2c9 5 20 0 20-11.5 0-.18 0-.37-.01-.55A7.72 7.72 0 0 0 23 3z"></path>
+                </svg>
+              </a>
+              <a href="https://instagram.com" class="rounded-full border border-white/10 p-2 transition-all hover:bg-white hover:text-black" aria-label="Instagram">
+                <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a href="https://linkedin.com" class="rounded-full border border-white/10 p-2 transition-all hover:bg-white hover:text-black" aria-label="LinkedIn">
+                <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
           </div>
+
           <div>
-            <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
-            <ul class="space-y-3">
-              <li><a href="/about" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
-              <li><a href="/privacy" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="/terms" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+            <h5 class="mb-8 text-xs font-bold uppercase tracking-[0.3em]">Navigation</h5>
+            <ul class="space-y-4 text-sm uppercase tracking-widest text-gray-400">
+              <li><a href="/about" class="transition-colors hover:text-amber-500">Our Mission</a></li>
+              <li><a href="/stats" class="transition-colors hover:text-amber-500">The Archive</a></li>
+              <li><a href="/contact" class="transition-colors hover:text-amber-500">Contributor Program</a></li>
+              <li><a href="/about" class="transition-colors hover:text-amber-500">Media Kit</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 class="text-lg font-semibold mb-6">Categories</h4>
-            <ul class="space-y-3">
-              <li><a href="/category/personal-finance" class="text-gray-300 hover:text-white transition-colors">Personal Finance</a></li>
-              <li><a href="/category/home-improvement" class="text-gray-300 hover:text-white transition-colors">Home Improvement</a></li>
-              <li><a href="/category/health-wellness" class="text-gray-300 hover:text-white transition-colors">Health & Wellness</a></li>
+            <h5 class="mb-8 text-xs font-bold uppercase tracking-[0.3em]">Departments</h5>
+            <ul class="space-y-4 text-sm uppercase tracking-widest text-gray-400">
+              <li><a href="/category/personal-finance" class="transition-colors hover:text-amber-500">Wealth Management</a></li>
+              <li><a href="/category/home-improvement" class="transition-colors hover:text-amber-500">Interior Design</a></li>
+              <li><a href="/category/health-wellness" class="transition-colors hover:text-amber-500">Longevity Science</a></li>
+              <li><a href="/stats" class="transition-colors hover:text-amber-500">Product Reviews</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 class="mb-8 text-xs font-bold uppercase tracking-[0.3em]">Legal</h5>
+            <ul class="space-y-4 text-sm uppercase tracking-widest text-gray-400">
+              <li><a href="/privacy" class="transition-colors hover:text-amber-500">Privacy Policy</a></li>
+              <li><a href="/terms" class="transition-colors hover:text-amber-500">Terms of Service</a></li>
+              <li><a href="/about" class="transition-colors hover:text-amber-500">Ethics Statement</a></li>
+              <li><a href="/privacy" class="transition-colors hover:text-amber-500">Cookie Settings</a></li>
             </ul>
           </div>
         </div>
-        <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} InsightHub. Practical wisdom for modern living.</p>
-          <p class="mt-2 text-sm">All content is expertly researched and regularly updated.</p>
+
+        <div class="flex flex-col items-center justify-between gap-6 border-t border-white/5 pt-10 md:flex-row">
+          <p class="text-[10px] uppercase tracking-[0.4em] text-gray-600">
+            &copy; {new Date().getFullYear()} INSIGHTHUB MEDIA GROUP. ALL RIGHTS RESERVED.
+          </p>
+          <div class="flex gap-8 text-[10px] uppercase tracking-[0.4em] text-gray-600">
+            <span>LONDON</span>
+            <span>NEW YORK</span>
+            <span>SINGAPORE</span>
+          </div>
         </div>
       </div>
     </footer>
 
     <!-- AdSense Script (to be added after approval) -->
     {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script> */}
+    <script is:inline>
+      (() => {
+        const nav = document.querySelector('[data-nav]');
+        const toggle = document.querySelector('[data-mobile-toggle]');
+        const menu = document.querySelector('[data-mobile-menu]');
+        const menuIcon = toggle?.querySelector('[data-menu-icon]');
+        const closeIcon = toggle?.querySelector('[data-close-icon]');
+
+        if (nav) {
+          const updateNav = () => {
+            const scrolled = window.scrollY > 50;
+            nav.classList.toggle('bg-white/80', scrolled);
+            nav.classList.toggle('backdrop-blur-md', scrolled);
+            nav.classList.toggle('py-3', scrolled);
+            nav.classList.toggle('shadow-sm', scrolled);
+            nav.classList.toggle('bg-transparent', !scrolled);
+            nav.classList.toggle('py-6', !scrolled);
+          };
+          updateNav();
+          window.addEventListener('scroll', updateNav, { passive: true });
+        }
+
+        if (toggle && menu && menuIcon && closeIcon) {
+          const setState = (open) => {
+            menu.classList.toggle('hidden', !open);
+            menuIcon.classList.toggle('hidden', open);
+            closeIcon.classList.toggle('hidden', !open);
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          };
+          setState(false);
+          toggle.addEventListener('click', () => {
+            const open = toggle.getAttribute('aria-expanded') !== 'true';
+            setState(open);
+          });
+        }
+      })();
+    </script>
   </body>
 </html>
