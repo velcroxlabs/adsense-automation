@@ -43,6 +43,11 @@ dist/
 # Data files
 *.csv
 *.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!astro.config.mjs
+!tailwind.config.js
 data/
 !sample-data/
 
