@@ -1,5 +1,6 @@
 ---
 import type { Props } from "astro";
+import { getPublishedArticles } from "../lib/content";
 import "../styles/global.css";
 
 export interface Props {
@@ -26,7 +27,19 @@ const categories = [
   { label: "Technology", href: "/stats" },
 ];
 
-const featuredPosts = [
+type FeaturedPost = {
+  id: number;
+  category: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  author?: string;
+  image: string;
+  href: string;
+};
+
+const fallbackFeaturedPosts: FeaturedPost[] = [
   {
     id: 1,
     category: "Personal Finance",
@@ -67,6 +80,56 @@ const featuredPosts = [
     href: "/category/home-improvement",
   },
 ];
+
+const categoryLabelBySlug: Record<string, string> = {
+  "personal-finance": "Personal Finance",
+  "home-improvement": "Home Improvement",
+  "health-wellness": "Health & Wellness",
+};
+
+const latestArticles = await getPublishedArticles(4);
+
+const fallbackHero = {
+  category: "Trending in Finance",
+  title: "The New Economics of Sustainable Luxury",
+  excerpt:
+    "How high-net-worth individuals are shifting their consumption habits towards longevity and ethical craftsmanship over traditional status symbols.",
+  author: "Alexander Pierce",
+  image:
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
+  href: "/about",
+};
+
+const heroPost = latestArticles[0]
+  ? {
+      category: categoryLabelBySlug[latestArticles[0].categorySlug] ?? "Editorial",
+      title: latestArticles[0].title,
+      excerpt: latestArticles[0].excerpt,
+      author: latestArticles[0].author,
+      image: latestArticles[0].image,
+      href: `/article/${latestArticles[0].slug}`,
+    }
+  : fallbackHero;
+
+const dbFeaturedPosts = latestArticles.slice(1).map((article, index) => ({
+  id: index + 1,
+  category: categoryLabelBySlug[article.categorySlug] ?? "Editorial",
+  title: article.title,
+  excerpt: article.excerpt,
+  date: article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "Recent",
+  readTime: article.readTimeLabel,
+  author: article.author,
+  image: article.image,
+  href: `/article/${article.slug}`,
+}));
+
+const featuredPosts = dbFeaturedPosts.length > 0 ? dbFeaturedPosts : fallbackFeaturedPosts;
 ---
 
 <!doctype html>
@@ -168,6 +231,7 @@ const featuredPosts = [
             </svg>
           </button>
           <button
+            data-newsletter-open
             type="button"
             class="editorial-ink-bg hidden rounded-full px-8 py-3 font-sans text-[12px] font-bold tracking-[0.08em] text-white transition-all hover:bg-amber-600 md:block"
           >
@@ -270,14 +334,12 @@ const featuredPosts = [
             </div>
           </div>
 
-          <div
-            class="group relative overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2"
-          >
+          <div class="group relative overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2">
             <div class="flex flex-col lg:flex-row">
               <div class="overflow-hidden lg:w-3/5">
                 <img
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200"
-                  alt="Modern skyline and architecture"
+                  src={heroPost.image}
+                  alt={heroPost.title}
                   class="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
               </div>
@@ -295,19 +357,15 @@ const featuredPosts = [
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                     <polyline points="17 6 23 6 23 12"></polyline>
                   </svg>
-                  Trending in Finance
+                  {heroPost.category}
                 </div>
-                <h2
-                  class="mb-6 cursor-pointer text-[clamp(2.4rem,3.3vw,3.25rem)] font-bold leading-[1.03] tracking-[-0.01em] transition-colors hover:text-amber-600"
-                >
-                  The New Economics of Sustainable Luxury
+                <h2 class="mb-6 text-[clamp(2.4rem,3.3vw,3.25rem)] font-bold leading-[1.03] tracking-[-0.01em] transition-colors hover:text-amber-600">
+                  <a href={heroPost.href}>{heroPost.title}</a>
                 </h2>
                 <p
                   class="mb-8 text-[clamp(1.35rem,1.5vw,1rem)] leading-[1.5] text-gray-500"
                 >
-                  How high-net-worth individuals are shifting their consumption
-                  habits towards longevity and ethical craftsmanship over
-                  traditional status symbols.
+                  {heroPost.excerpt}
                 </p>
                 <div
                   class="mt-auto flex items-center justify-between border-t border-gray-100 pt-8"
@@ -323,16 +381,14 @@ const featuredPosts = [
                       />
                     </div>
                     <div>
-                      <p class="font-sans text-sm font-bold">
-                        Alexander Pierce
-                      </p>
+                      <p class="font-sans text-sm font-bold">{heroPost.author}</p>
                       <p class="font-sans text-xs text-gray-400">
                         Editor-in-Chief
                       </p>
                     </div>
                   </div>
                   <a
-                    href="/about"
+                    href={heroPost.href}
                     class="flex items-center gap-1 font-sans text-[13px] font-bold tracking-[0.16em] transition-transform group-hover:translate-x-2"
                   >
                     READ STORY
@@ -476,6 +532,7 @@ const featuredPosts = [
               class="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-4 font-sans focus:border-amber-500 focus:outline-none transition-colors"
             />
             <button
+              data-newsletter-open
               type="button"
               class="whitespace-nowrap rounded-full bg-white px-8 py-4 font-sans font-bold text-black transition-all hover:bg-amber-500 hover:text-white"
             >
@@ -490,6 +547,71 @@ const featuredPosts = [
         </div>
       </section>
     </main>
+
+    <div
+      data-newsletter-modal
+      class="fixed inset-0 z-[60] hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="newsletter-title"
+    >
+      <button
+        data-newsletter-close
+        type="button"
+        class="absolute inset-0 h-full w-full bg-black/55 backdrop-blur-[2px]"
+        aria-label="Close newsletter modal"
+      ></button>
+      <div class="relative mx-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl rounded-2xl bg-white p-8 shadow-2xl">
+        <button
+          data-newsletter-close
+          type="button"
+          class="absolute right-4 top-4 rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-800"
+          aria-label="Close"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <p class="mb-3 font-sans text-[11px] font-bold uppercase tracking-[0.26em] text-amber-600">
+          Newsletter
+        </p>
+        <h3 id="newsletter-title" class="mb-3 text-4xl font-bold leading-[1.05]">
+          Get the latest articles first.
+        </h3>
+        <p class="mb-8 text-lg leading-relaxed text-gray-500">
+          Receive curated weekly insights from finance, home improvement, and
+          health directly in your inbox.
+        </p>
+        <form data-newsletter-form class="flex flex-col gap-4 sm:flex-row">
+          <input
+            data-newsletter-email
+            type="email"
+            required
+            placeholder="Your email address"
+            class="flex-1 rounded-full border border-gray-200 px-6 py-4 font-sans focus:border-amber-500 focus:outline-none"
+          />
+          <button
+            type="submit"
+            class="whitespace-nowrap rounded-full bg-black px-8 py-4 font-sans text-sm font-bold tracking-[0.08em] text-white transition-colors hover:bg-amber-600"
+          >
+            SUBSCRIBE
+          </button>
+        </form>
+        <p
+          data-newsletter-success
+          class="mt-4 hidden font-sans text-xs font-semibold uppercase tracking-[0.14em] text-emerald-600"
+        >
+          Thanks. You are subscribed.
+        </p>
+      </div>
+    </div>
 
     <footer class="editorial-dark border-t border-white/5 text-white">
       <div class="container mx-auto px-6 py-20">
@@ -686,6 +808,12 @@ const featuredPosts = [
         const menu = document.querySelector("[data-mobile-menu]");
         const menuIcon = toggle?.querySelector("[data-menu-icon]");
         const closeIcon = toggle?.querySelector("[data-close-icon]");
+        const newsletterModal = document.querySelector("[data-newsletter-modal]");
+        const newsletterOpenButtons = document.querySelectorAll("[data-newsletter-open]");
+        const newsletterCloseButtons = document.querySelectorAll("[data-newsletter-close]");
+        const newsletterForm = document.querySelector("[data-newsletter-form]");
+        const newsletterEmail = document.querySelector("[data-newsletter-email]");
+        const newsletterSuccess = document.querySelector("[data-newsletter-success]");
 
         if (nav) {
           const updateNav = () => {
@@ -713,6 +841,40 @@ const featuredPosts = [
             const open = toggle.getAttribute("aria-expanded") !== "true";
             setState(open);
           });
+        }
+
+        if (newsletterModal) {
+          const setNewsletterState = (open) => {
+            newsletterModal.classList.toggle("hidden", !open);
+            document.body.classList.toggle("overflow-hidden", open);
+            if (open && newsletterEmail instanceof HTMLInputElement) {
+              newsletterEmail.focus();
+            }
+          };
+
+          newsletterOpenButtons.forEach((button) => {
+            button.addEventListener("click", () => setNewsletterState(true));
+          });
+
+          newsletterCloseButtons.forEach((button) => {
+            button.addEventListener("click", () => setNewsletterState(false));
+          });
+
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !newsletterModal.classList.contains("hidden")) {
+              setNewsletterState(false);
+            }
+          });
+
+          if (newsletterForm instanceof HTMLFormElement) {
+            newsletterForm.addEventListener("submit", (event) => {
+              event.preventDefault();
+              if (newsletterSuccess) {
+                newsletterSuccess.classList.remove("hidden");
+              }
+              newsletterForm.reset();
+            });
+          }
         }
       })();
     </script>

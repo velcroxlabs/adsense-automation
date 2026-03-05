@@ -1,5 +1,10 @@
 ---
 import ContentLayout from "../../layouts/ContentLayout.astro";
+import {
+  CATEGORY_SLUGS,
+  getPublishedArticlesByCategory,
+  type WebsiteArticle,
+} from "../../lib/content";
 
 type CategoryKey = "personal-finance" | "home-improvement" | "health-wellness";
 
@@ -12,16 +17,6 @@ interface CategoryData {
   accentText: string;
   accentLine: string;
   accentUnderline: string;
-}
-
-interface CategoryArticle {
-  id: number;
-  title: string;
-  excerpt: string;
-  author: string;
-  readTime: string;
-  date: string;
-  image: string;
 }
 
 const categories: Record<CategoryKey, CategoryData> = {
@@ -64,11 +59,7 @@ const categories: Record<CategoryKey, CategoryData> = {
 };
 
 export async function getStaticPaths() {
-  const slugs: CategoryKey[] = [
-    "personal-finance",
-    "home-improvement",
-    "health-wellness",
-  ];
+  const slugs = CATEGORY_SLUGS as CategoryKey[];
 
   return slugs.map((slug) => ({
     params: { slug },
@@ -83,52 +74,12 @@ if (!active) {
   return Astro.redirect("/404");
 }
 
-const articles: CategoryArticle[] = [
-  {
-    id: 1,
-    title: `The 2024 Definitive Guide to ${active.name}`,
-    excerpt:
-      "An exhaustive analysis of emerging trends and foundational principles required to excel in the current landscape.",
-    author: "Julianne Vane",
-    readTime: "12 min read",
-    date: "MARCH 2024",
-    image:
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 2,
-    title: `Common Fallacies in Modern ${active.name}`,
-    excerpt:
-      "Deconstructing popular myths that hinder progress and identifying the data-backed reality.",
-    author: "Dr. Marcus Thorne",
-    readTime: "8 min read",
-    date: "FEBRUARY 2024",
-    image:
-      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 3,
-    title: "Advanced Methodologies for Professional Success",
-    excerpt:
-      "Moving beyond introductory concepts to implement high-level systems and frameworks.",
-    author: "Elena Rossi",
-    readTime: "15 min read",
-    date: "FEBRUARY 2024",
-    image:
-      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 4,
-    title: "A Case Study in Excellence",
-    excerpt:
-      "Reviewing successful implementations of these strategies within global organizations.",
-    author: "Julianne Vane",
-    readTime: "10 min read",
-    date: "JANUARY 2024",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800",
-  },
-];
+const articles: WebsiteArticle[] = await getPublishedArticlesByCategory(
+  activeSlug,
+  8,
+);
+const featuredArticle = articles[0] ?? null;
+const moreArticles = articles.slice(1);
 ---
 
 <ContentLayout
@@ -289,64 +240,80 @@ const articles: CategoryArticle[] = [
 
     <section class="border-b border-gray-100 bg-white px-8 py-24">
       <div class="container mx-auto">
-        <div class="grid items-center gap-16 lg:grid-cols-12">
-          <div class="group cursor-pointer overflow-hidden rounded-sm lg:col-span-7">
-            <img
-              src={articles[0].image}
-              alt={articles[0].title}
-              class="aspect-[16/10] w-full object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-          </div>
+        {
+          featuredArticle ? (
+            <div class="grid items-center gap-16 lg:grid-cols-12">
+              <a
+                href={`/article/${featuredArticle.slug}`}
+                class="group cursor-pointer overflow-hidden rounded-sm lg:col-span-7"
+              >
+                <img
+                  src={featuredArticle.image}
+                  alt={featuredArticle.title}
+                  class="aspect-[16/10] w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+              </a>
 
-          <div class="lg:col-span-5">
-            <div
-              class="mb-6 flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
-            >
-              <svg
-                class="h-[14px] w-[14px] text-amber-500"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5L12 3z"></path>
-              </svg>
-              Special Edition Article
-            </div>
-            <h2
-              class="mb-6 cursor-pointer text-[clamp(2rem,3.8vw,3rem)] font-bold italic leading-[1.03] transition-colors hover:text-amber-700"
-            >
-              {articles[0].title}
-            </h2>
-            <p class="mb-8 text-lg leading-relaxed text-gray-500">
-              {articles[0].excerpt}
-            </p>
-            <div class="flex items-center justify-between border-t border-gray-100 pt-8">
-              <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-full bg-gray-100"></div>
-                <span class="font-sans text-xs font-bold tracking-wider">
-                  {articles[0].author}
-                </span>
-              </div>
-              <button
-                type="button"
-                class="flex items-center gap-2 font-sans text-xs font-black uppercase tracking-widest transition-transform hover:translate-x-2"
-              >
-                Explore
-                <svg
-                  class="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
+              <div class="lg:col-span-5">
+                <div
+                  class="mb-6 flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
                 >
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
+                  <svg
+                    class="h-[14px] w-[14px] text-amber-500"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5L12 3z"></path>
+                  </svg>
+                  Special Edition Article
+                </div>
+                <h2 class="mb-6 text-[clamp(2rem,3.8vw,3rem)] font-bold italic leading-[1.03] transition-colors hover:text-amber-700">
+                  <a href={`/article/${featuredArticle.slug}`}>
+                    {featuredArticle.title}
+                  </a>
+                </h2>
+                <p class="mb-8 text-lg leading-relaxed text-gray-500">
+                  {featuredArticle.excerpt}
+                </p>
+                <div class="flex items-center justify-between border-t border-gray-100 pt-8">
+                  <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-full bg-gray-100"></div>
+                    <span class="font-sans text-xs font-bold tracking-wider">
+                      {featuredArticle.author}
+                    </span>
+                  </div>
+                  <a
+                    href={`/article/${featuredArticle.slug}`}
+                    class="flex items-center gap-2 font-sans text-xs font-black uppercase tracking-widest transition-transform hover:translate-x-2"
+                  >
+                    Explore
+                    <svg
+                      class="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          ) : (
+            <div class="rounded-xl border border-dashed border-gray-300 px-8 py-16 text-center">
+              <p class="font-sans text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                No published content in this category yet.
+              </p>
+              <p class="mt-4 text-lg text-gray-500">
+                Seed and publish articles in Supabase to populate this page.
+              </p>
+            </div>
+          )
+        }
       </div>
     </section>
 
@@ -398,49 +365,51 @@ const articles: CategoryArticle[] = [
         </div>
 
         <div class="grid gap-x-12 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
-          {articles.slice(1).map((article) => (
+          {moreArticles.map((article) => (
             <article class="group cursor-pointer">
-              <div class="relative mb-8 aspect-[4/5] overflow-hidden rounded-sm bg-gray-100">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
-                />
-                <div
-                  class="absolute bottom-6 left-6 opacity-0 transition-opacity group-hover:opacity-100"
-                >
-                  <button
-                    type="button"
-                    class="rounded-full bg-white/90 p-3 shadow-xl backdrop-blur-sm"
-                    aria-label="Bookmark"
+              <a href={`/article/${article.slug}`} class="block">
+                <div class="relative mb-8 aspect-[4/5] overflow-hidden rounded-sm bg-gray-100">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
+                  />
+                  <div
+                    class="absolute bottom-6 left-6 opacity-0 transition-opacity group-hover:opacity-100"
                   >
-                    <svg
-                      class="h-[18px] w-[18px]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.8"
+                    <button
+                      type="button"
+                      class="rounded-full bg-white/90 p-3 shadow-xl backdrop-blur-sm"
+                      aria-label="Bookmark"
                     >
-                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                  </button>
+                      <svg
+                        class="h-[18px] w-[18px]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      >
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div
-                class="mb-4 flex items-center gap-4 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
-                <span>{article.date}</span>
-                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
-                <span>{article.readTime}</span>
-              </div>
-              <h4
-                class={`mb-4 text-2xl font-bold leading-tight decoration-2 underline-offset-8 group-hover:underline ${active.accentUnderline}`}
-              >
-                {article.title}
-              </h4>
-              <p class="line-clamp-2 leading-relaxed text-gray-500">
-                {article.excerpt}
-              </p>
+                <div
+                  class="mb-4 flex items-center gap-4 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
+                >
+                  <span>{article.dateLabel}</span>
+                  <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                  <span>{article.readTimeLabel}</span>
+                </div>
+                <h4
+                  class={`mb-4 text-2xl font-bold leading-tight decoration-2 underline-offset-8 group-hover:underline ${active.accentUnderline}`}
+                >
+                  {article.title}
+                </h4>
+                <p class="line-clamp-2 leading-relaxed text-gray-500">
+                  {article.excerpt}
+                </p>
+              </a>
             </article>
           ))}
         </div>
