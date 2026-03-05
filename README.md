@@ -34,9 +34,6 @@ adsense-automation/
 ├── database/                   # PostgreSQL schema for Supabase
 ├── scripts/                    # Python automation scripts
 ├── .github/workflows/          # CI/CD pipelines (GitHub Actions)
-├── ARCHITECTURE.md            # System design documentation
-├── plan.md                    # Master execution plan
-├── QUICK_START.md            # Quick start guide
 └── requirements.txt           # Python dependencies
 ```
 
@@ -60,7 +57,7 @@ npm install
 python scripts/setup-supabase.py
 
 # Option B: Manual setup
-# Follow database/SETUP_MANUALLY.md
+# Follow internal setup guide
 ```
 
 ### 3. Configure Environment
@@ -109,11 +106,9 @@ cd website && npm run dev
 - **Automation**: 95%+ hands-off operation
 
 ## 📚 Documentation
-- `ARCHITECTURE.md` - System architecture and design
-- `plan.md` - Detailed execution plan with phases
-- `QUICK_START.md` - Step-by-step setup guide
-- `database/SETUP_MANUALLY.md` - Supabase manual setup
-- `kpi.md` - Key Performance Indicators
+- **Internal documentation** available for development and setup
+- **System architecture**, **execution plans**, and **KPI tracking** documented internally
+- **Setup guides** and **configuration instructions** maintained internally
 
 ## 🛠️ Development
 ```bash
@@ -139,7 +134,7 @@ MIT - See LICENSE file
 ## 🆘 Support
 - **Issues**: GitHub Issues
 - **Discord**: https://discord.gg/clawd
-- **Documentation**: Check project docs first
+- **Documentation**: Internal documentation available
 
 ---
 
