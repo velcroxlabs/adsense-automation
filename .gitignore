@@ -43,6 +43,8 @@ dist/
 # Data files
 *.csv
 *.json
+*.txt
+!requirements.txt
 !package.json
 !package-lock.json
 !tsconfig.json
