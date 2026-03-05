@@ -1,303 +1,525 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentLayout from "../../layouts/ContentLayout.astro";
 
-// Map slugs to category data
-const categories = {
-  'personal-finance': {
-    name: 'Personal Finance',
-    description: 'Expert guides on budgeting, investing, saving strategies, and achieving financial freedom.',
-    color: 'teal',
-    icon: '💼',
-    metaDescription: 'Learn how to manage your money effectively with our comprehensive personal finance guides and investment strategies.'
+type CategoryKey = "personal-finance" | "home-improvement" | "health-wellness";
+
+interface CategoryData {
+  name: string;
+  description: string;
+  tagline: string;
+  icon: string;
+  metaDescription: string;
+  accentText: string;
+  accentLine: string;
+  accentUnderline: string;
+}
+
+interface CategoryArticle {
+  id: number;
+  title: string;
+  excerpt: string;
+  author: string;
+  readTime: string;
+  date: string;
+  image: string;
+}
+
+const categories: Record<CategoryKey, CategoryData> = {
+  "personal-finance": {
+    name: "Wealth Management",
+    description:
+      "The strategic pursuit of financial independence and sophisticated asset management.",
+    tagline: "STRATEGIC WEALTH",
+    icon: "\u{1F4BC}",
+    metaDescription:
+      "Strategic insights on wealth management, financial independence, and advanced asset allocation.",
+    accentText: "text-amber-600",
+    accentLine: "bg-amber-600",
+    accentUnderline: "decoration-amber-500",
   },
-  'home-improvement': {
-    name: 'Home Improvement', 
-    description: 'Practical DIY projects, repair guides, renovation tips, and home maintenance advice.',
-    color: 'amber',
-    icon: '🏠',
-    metaDescription: 'Transform your living space with our step-by-step home improvement guides, DIY projects, and renovation tips.'
+  "home-improvement": {
+    name: "Interior Design",
+    description:
+      "Curating spaces that balance architectural integrity with modern minimalist luxury.",
+    tagline: "SPACE & DESIGN",
+    icon: "\u{1F3E0}",
+    metaDescription:
+      "Interior design strategy, home curation, and modern methods for practical luxury spaces.",
+    accentText: "text-stone-600",
+    accentLine: "bg-stone-600",
+    accentUnderline: "decoration-stone-500",
   },
-  'health-wellness': {
-    name: 'Health & Wellness',
-    description: 'Science-backed advice on fitness, nutrition, mental health, and holistic wellness practices.',
-    color: 'emerald',
-    icon: '🌱',
-    metaDescription: 'Improve your wellbeing with our health and wellness guides covering fitness, nutrition, mental health, and holistic practices.'
-  }
+  "health-wellness": {
+    name: "Longevity & Health",
+    description:
+      "Science-led practices for metabolic health, cognitive performance, and vitality.",
+    tagline: "VITALITY SCIENCE",
+    icon: "\u{1F331}",
+    metaDescription:
+      "Evidence-based guides for longevity, metabolic health, performance, and long-term vitality.",
+    accentText: "text-emerald-700",
+    accentLine: "bg-emerald-700",
+    accentUnderline: "decoration-emerald-500",
+  },
 };
 
-// Export getStaticPaths for static generation
 export async function getStaticPaths() {
-  // Define categories here so it's available during build
-  const categories = {
-    'personal-finance': {
-      name: 'Personal Finance',
-      description: 'Expert guides on budgeting, investing, saving strategies, and achieving financial freedom.',
-      color: 'teal',
-      icon: '💼',
-      metaDescription: 'Learn how to manage your money effectively with our comprehensive personal finance guides and investment strategies.'
-    },
-    'home-improvement': {
-      name: 'Home Improvement', 
-      description: 'Practical DIY projects, repair guides, renovation tips, and home maintenance advice.',
-      color: 'amber',
-      icon: '🏠',
-      metaDescription: 'Transform your living space with our step-by-step home improvement guides, DIY projects, and renovation tips.'
-    },
-    'health-wellness': {
-      name: 'Health & Wellness',
-      description: 'Science-backed advice on fitness, nutrition, mental health, and holistic wellness practices.',
-      color: 'emerald',
-      icon: '🌱',
-      metaDescription: 'Improve your wellbeing with our health and wellness guides covering fitness, nutrition, mental health, and holistic practices.'
-    }
-  };
-  
-  return Object.keys(categories).map((slug) => ({
-    params: { slug }
+  const slugs: CategoryKey[] = [
+    "personal-finance",
+    "home-improvement",
+    "health-wellness",
+  ];
+
+  return slugs.map((slug) => ({
+    params: { slug },
   }));
 }
 
-// Get the slug from the URL
 const { slug } = Astro.params;
+const activeSlug = slug as CategoryKey;
+const active = categories[activeSlug];
 
-// Get category data or show 404
-const category = categories[slug as keyof typeof categories];
-
-if (!category) {
-  return Astro.redirect('/404');
+if (!active) {
+  return Astro.redirect("/404");
 }
 
-// In a real implementation, we would fetch articles from Supabase
-// const articles = await articleService.getArticlesByCategory(slug);
-// For now, using placeholder data
-const placeholderArticles = [
+const articles: CategoryArticle[] = [
   {
     id: 1,
-    title: `How to Master ${category.name}: Essential Guide for Beginners`,
-    excerpt: `Learn the fundamental principles and practical steps to excel in ${category.name.toLowerCase()}.`,
-    readTime: '8 min read',
-    date: 'Recent',
-    slug: `master-${slug}-guide`
+    title: `The 2024 Definitive Guide to ${active.name}`,
+    excerpt:
+      "An exhaustive analysis of emerging trends and foundational principles required to excel in the current landscape.",
+    author: "Julianne Vane",
+    readTime: "12 min read",
+    date: "MARCH 2024",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 2,
-    title: `Top 10 ${category.name} Mistakes to Avoid`,
-    excerpt: `Common pitfalls and how to steer clear of them for better results.`,
-    readTime: '6 min read',
-    date: 'Recent',
-    slug: `top-10-${slug}-mistakes`
+    title: `Common Fallacies in Modern ${active.name}`,
+    excerpt:
+      "Deconstructing popular myths that hinder progress and identifying the data-backed reality.",
+    author: "Dr. Marcus Thorne",
+    readTime: "8 min read",
+    date: "FEBRUARY 2024",
+    image:
+      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 3,
-    title: `Advanced Strategies for ${category.name} Success`,
-    excerpt: `Take your skills to the next level with these expert techniques and approaches.`,
-    readTime: '10 min read',
-    date: 'Recent',
-    slug: `advanced-${slug}-strategies`
+    title: "Advanced Methodologies for Professional Success",
+    excerpt:
+      "Moving beyond introductory concepts to implement high-level systems and frameworks.",
+    author: "Elena Rossi",
+    readTime: "15 min read",
+    date: "FEBRUARY 2024",
+    image:
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 4,
-    title: `${category.name} Tools and Resources You Need`,
-    excerpt: `Essential tools, apps, and resources to help you achieve your goals more effectively.`,
-    readTime: '7 min read',
-    date: 'Recent',
-    slug: `${slug}-tools-resources`
+    title: "A Case Study in Excellence",
+    excerpt:
+      "Reviewing successful implementations of these strategies within global organizations.",
+    author: "Julianne Vane",
+    readTime: "10 min read",
+    date: "JANUARY 2024",
+    image:
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800",
   },
-  {
-    id: 5,
-    title: `Real-World ${category.name} Case Studies`,
-    excerpt: `Learn from practical examples and success stories in this field.`,
-    readTime: '9 min read',
-    date: 'Recent',
-    slug: `${slug}-case-studies`
-  },
-  {
-    id: 6,
-    title: `Future Trends in ${category.name}`,
-    excerpt: `What to expect and how to prepare for upcoming developments in this area.`,
-    readTime: '8 min read',
-    date: 'Recent',
-    slug: `future-trends-${slug}`
-  }
 ];
-
-const colorClasses = {
-  teal: {
-    bg: 'bg-teal-50',
-    text: 'text-teal-700',
-    border: 'border-teal-200',
-    badge: 'bg-teal-100 text-teal-700',
-    button: 'bg-teal-600 hover:bg-teal-700'
-  },
-  amber: {
-    bg: 'bg-amber-50',
-    text: 'text-amber-700',
-    border: 'border-amber-200',
-    badge: 'bg-amber-100 text-amber-700',
-    button: 'bg-amber-600 hover:bg-amber-700'
-  },
-  emerald: {
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-700',
-    border: 'border-emerald-200',
-    badge: 'bg-emerald-100 text-emerald-700',
-    button: 'bg-emerald-600 hover:bg-emerald-700'
-  }
-};
-
-const color = colorClasses[category.color as keyof typeof colorClasses];
 ---
 
-<BaseLayout 
-  title={category.name}
-  description={category.metaDescription}
-  canonicalUrl={`/category/${slug}`}
+<ContentLayout
+  title={active.name}
+  description={active.metaDescription}
+  canonicalUrl={`/category/${activeSlug}`}
 >
-  <!-- Category Header -->
-  <div class={`${color.bg} ${color.border} rounded-3xl p-10 mb-12 border-2`}>
-    <div class="flex flex-col md:flex-row items-center justify-between">
-      <div class="md:w-2/3">
-        <div class="inline-flex items-center px-4 py-2 ${color.badge} rounded-full text-sm font-semibold mb-6">
-          <div class={`w-2 h-2 rounded-full mr-2 ${category.color === 'teal' ? 'bg-teal-500' : category.color === 'amber' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
-          Category
-        </div>
-        <h1 class="text-5xl font-bold text-gray-900 mb-6">
-          {category.name}
-          <span class="block text-4xl mt-4 opacity-60">{category.icon}</span>
-        </h1>
-        <p class="text-xl text-gray-700 mb-8 max-w-3xl">
-          {category.description}
-        </p>
-        <div class="flex flex-wrap gap-4">
-          <a href="#articles" class={`px-6 py-3 ${color.button} text-white font-semibold rounded-lg transition-colors`}>
-            Browse Articles
-          </a>
-          <a href="/" class="px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
-            Back to Home
-          </a>
-        </div>
-      </div>
-      <div class="mt-8 md:mt-0">
-        <div class="text-8xl opacity-20">
-          {category.icon}
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="editorial-paper editorial-ink min-h-screen selection:bg-amber-100">
+    <nav
+      data-nav
+      class="fixed inset-x-0 top-0 z-50 bg-transparent py-8 transition-all duration-500"
+    >
+      <div class="container mx-auto flex items-center justify-between px-8">
+        <a
+          href="/"
+          class="font-sans text-[32px] font-black uppercase tracking-[-0.03em]"
+        >
+          Insight<span class="text-amber-600">Hub</span>
+        </a>
 
-  <!-- Articles Grid -->
-  <section id="articles" class="mb-20">
-    <div class="flex justify-between items-center mb-12">
-      <div>
-        <h2 class="text-4xl font-bold text-gray-900">Latest {category.name} Guides</h2>
-        <p class="text-gray-600 mt-2">Practical articles with actionable advice and expert insights</p>
-      </div>
-      <div class="text-sm text-gray-500">
-        {placeholderArticles.length} articles
-      </div>
-    </div>
+        <div
+          class="hidden gap-10 font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400 lg:flex"
+        >
+          {(Object.keys(categories) as CategoryKey[]).map((key) => (
+            <a
+              href={`/category/${key}`}
+              class={`transition-colors hover:text-black ${activeSlug === key ? "text-black" : ""}`}
+            >
+              {categories[key].name}
+            </a>
+          ))}
+        </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {placeholderArticles.map((article) => (
-        <article class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-          <div class="p-8">
-            <div class="mb-6">
-              <span class={`inline-block px-3 py-1 text-xs font-semibold ${color.badge} rounded-full`}>
-                {category.name}
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="rounded-full p-2 transition-colors hover:bg-black/5"
+            aria-label="Search"
+          >
+            <svg
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+          <button
+            data-mobile-toggle
+            type="button"
+            class="rounded-full p-2 transition-colors hover:bg-black/5 lg:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-category-nav"
+            aria-label="Open menu"
+          >
+            <svg
+              data-menu-icon
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <svg
+              data-close-icon
+              class="hidden h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-category-nav"
+        data-mobile-menu
+        class="container mx-auto hidden px-8 pb-4 pt-4 lg:hidden"
+      >
+        <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div class="flex flex-col gap-4">
+            {(Object.keys(categories) as CategoryKey[]).map((key) => (
+              <a
+                href={`/category/${key}`}
+                class={`font-sans text-[11px] font-bold uppercase tracking-[0.2em] transition-colors hover:text-black ${activeSlug === key ? "text-black" : "text-gray-500"}`}
+              >
+                {categories[key].name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <header class="border-b border-gray-200 px-8 pb-20 pt-40">
+      <div class="container mx-auto">
+        <div
+          class="relative flex flex-col items-baseline justify-between gap-8 lg:flex-row"
+        >
+          <div class="max-w-3xl">
+            <div class="mb-6 flex items-center gap-3">
+              <span class={`h-[1px] w-10 ${active.accentLine}`}></span>
+              <span
+                class={`font-sans text-[11px] font-black uppercase tracking-[0.4em] ${active.accentText}`}
+              >
+                {active.tagline}
               </span>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-4 line-clamp-2">
-              <a href={`/article/${article.slug}`} class="hover:text-teal-600 transition-colors">
-                {article.title}
-              </a>
-            </h3>
-            <p class="text-gray-600 mb-6 line-clamp-3">
-              {article.excerpt}
+            <h1
+              class="mb-8 text-[clamp(3.6rem,8.5vw,7.5rem)] font-bold italic leading-[0.93] tracking-tight"
+            >
+              {active.name}.
+            </h1>
+            <p class="max-w-2xl text-xl font-light leading-relaxed text-gray-500 md:text-2xl">
+              {active.description}
             </p>
-            <div class="flex items-center justify-between text-sm text-gray-500">
-              <div class="flex items-center space-x-4">
-                <span>{article.readTime}</span>
-                <span>•</span>
-                <span>{article.date}</span>
-              </div>
-              <a href={`/article/${article.slug}`} class={`${color.text} font-semibold hover:underline`}>
-                Read guide →
-              </a>
-            </div>
           </div>
-        </article>
-      ))}
-    </div>
-
-    <!-- Load More (Placeholder) -->
-    <div class="text-center mt-12">
-      <button class="px-8 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors">
-        Load More Articles
-      </button>
-      <p class="text-gray-500 text-sm mt-4">
-        More content is being added regularly. Check back soon for updates!
-      </p>
-    </div>
-  </section>
-
-  <!-- Category Resources -->
-  <section class={`${color.bg} rounded-3xl p-10 mb-12`}>
-    <div class="max-w-4xl mx-auto text-center">
-      <h3 class="text-3xl font-bold text-gray-900 mb-6">Master {category.name}</h3>
-      <p class="text-gray-700 text-lg mb-10 max-w-3xl mx-auto">
-        Our comprehensive guides are designed to help you progress from beginner to advanced levels, 
-        with practical advice you can implement immediately.
-      </p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-xl p-6">
-          <div class="text-3xl mb-4">📚</div>
-          <h4 class="text-xl font-bold mb-3">Beginner Friendly</h4>
-          <p class="text-gray-600">Start with the basics and build your knowledge step by step.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6">
-          <div class="text-3xl mb-4">🎯</div>
-          <h4 class="text-xl font-bold mb-3">Actionable Advice</h4>
-          <p class="text-gray-600">Practical steps you can take right away for immediate results.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6">
-          <div class="text-3xl mb-4">🔄</div>
-          <h4 class="text-xl font-bold mb-3">Regular Updates</h4>
-          <p class="text-gray-600">Content is refreshed to reflect current best practices.</p>
+          <div
+            class="pointer-events-none absolute right-8 top-0 hidden select-none text-[120px] opacity-[0.03] lg:block"
+          >
+            {active.icon}
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Related Categories -->
-  <section class="mb-20">
-    <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">Explore Related Topics</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-      {Object.entries(categories)
-        .filter(([key]) => key !== slug)
-        .map(([key, cat]) => {
-          const relatedColor = colorClasses[cat.color as keyof typeof colorClasses];
-          return (
-            <a 
-              href={`/category/${key}`} 
-              class={`${relatedColor.bg} ${relatedColor.border} rounded-2xl p-8 border-2 hover:shadow-lg transition-all`}
+    <section class="border-b border-gray-100 bg-white px-8 py-24">
+      <div class="container mx-auto">
+        <div class="grid items-center gap-16 lg:grid-cols-12">
+          <div class="group cursor-pointer overflow-hidden rounded-sm lg:col-span-7">
+            <img
+              src={articles[0].image}
+              alt={articles[0].title}
+              class="aspect-[16/10] w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+          </div>
+
+          <div class="lg:col-span-5">
+            <div
+              class="mb-6 flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
             >
-              <div class="flex items-center">
-                <div class="text-4xl mr-6">{cat.icon}</div>
-                <div>
-                  <h4 class="text-xl font-bold text-gray-900 mb-2">{cat.name}</h4>
-                  <p class="text-gray-600 text-sm">{cat.description.substring(0, 80)}...</p>
-                  <div class={`mt-4 ${relatedColor.text} font-semibold flex items-center`}>
-                    Browse category
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              <svg
+                class="h-[14px] w-[14px] text-amber-500"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5L12 3z"></path>
+              </svg>
+              Special Edition Article
+            </div>
+            <h2
+              class="mb-6 cursor-pointer text-[clamp(2rem,3.8vw,3rem)] font-bold italic leading-[1.03] transition-colors hover:text-amber-700"
+            >
+              {articles[0].title}
+            </h2>
+            <p class="mb-8 text-lg leading-relaxed text-gray-500">
+              {articles[0].excerpt}
+            </p>
+            <div class="flex items-center justify-between border-t border-gray-100 pt-8">
+              <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-gray-100"></div>
+                <span class="font-sans text-xs font-bold tracking-wider">
+                  {articles[0].author}
+                </span>
+              </div>
+              <button
+                type="button"
+                class="flex items-center gap-2 font-sans text-xs font-black uppercase tracking-widest transition-transform hover:translate-x-2"
+              >
+                Explore
+                <svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-8 py-24">
+      <div class="container mx-auto">
+        <div class="mb-16 flex items-end justify-between">
+          <div>
+            <h3
+              class="mb-2 font-sans text-[11px] font-black uppercase tracking-[0.4em] text-gray-300"
+            >
+              COLLECTION
+            </h3>
+            <h2 class="text-3xl font-bold">Latest Reports</h2>
+          </div>
+          <div class="hidden gap-4 md:flex">
+            <button
+              type="button"
+              class="rounded-full border border-gray-200 p-3 transition-all hover:bg-black hover:text-white"
+              aria-label="Previous"
+            >
+              <svg
+                class="h-[18px] w-[18px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="rounded-full border border-gray-200 p-3 transition-all hover:bg-black hover:text-white"
+              aria-label="Next"
+            >
+              <svg
+                class="h-[18px] w-[18px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid gap-x-12 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
+          {articles.slice(1).map((article) => (
+            <article class="group cursor-pointer">
+              <div class="relative mb-8 aspect-[4/5] overflow-hidden rounded-sm bg-gray-100">
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
+                />
+                <div
+                  class="absolute bottom-6 left-6 opacity-0 transition-opacity group-hover:opacity-100"
+                >
+                  <button
+                    type="button"
+                    class="rounded-full bg-white/90 p-3 shadow-xl backdrop-blur-sm"
+                    aria-label="Bookmark"
+                  >
+                    <svg
+                      class="h-[18px] w-[18px]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                     </svg>
-                  </div>
+                  </button>
                 </div>
               </div>
-            </a>
-          );
-        })}
-    </div>
-  </section>
-</BaseLayout>
+              <div
+                class="mb-4 flex items-center gap-4 font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400"
+              >
+                <span>{article.date}</span>
+                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                <span>{article.readTime}</span>
+              </div>
+              <h4
+                class={`mb-4 text-2xl font-bold leading-tight decoration-2 underline-offset-8 group-hover:underline ${active.accentUnderline}`}
+              >
+                {article.title}
+              </h4>
+              <p class="line-clamp-2 leading-relaxed text-gray-500">
+                {article.excerpt}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="relative overflow-hidden bg-stone-900 py-32 text-white">
+      <div class="container relative z-10 mx-auto px-8">
+        <div class="max-w-4xl">
+          <svg
+            class="mb-8 text-amber-500"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="8" r="3"></circle>
+            <path d="M14.5 17.5L12 15l-2.5 2.5-3.5-3.5L8.5 11.5 6 9l3.5-3.5L12 8l2.5-2.5L18 9l-2.5 2.5L18 14z"></path>
+          </svg>
+          <h2 class="mb-8 text-5xl font-bold italic leading-tight md:text-7xl">
+            Become a Master of <br />
+            <span
+              class="not-italic underline decoration-amber-600 underline-offset-[12px]"
+              >Your Environment.</span
+            >
+          </h2>
+          <p class="mb-12 max-w-2xl text-xl font-light leading-relaxed text-stone-400">
+            Access our full library of proprietary frameworks and executive
+            reports designed for those who settle for nothing less than
+            excellence.
+          </p>
+          <div class="flex flex-col gap-6 sm:flex-row">
+            <button
+              type="button"
+              class="bg-amber-600 px-10 py-5 font-sans text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-amber-700"
+            >
+              Download Resource Library
+            </button>
+            <button
+              type="button"
+              class="border border-white/20 px-10 py-5 font-sans text-xs font-bold uppercase tracking-widest transition-all hover:bg-white hover:text-black"
+            >
+              Contact the Editors
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-900/10 via-transparent to-transparent"
+      >
+      </div>
+    </section>
+
+    <footer class="border-t border-gray-100 bg-white py-20">
+      <div class="container mx-auto px-8 text-center">
+        <p
+          class="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-gray-300"
+        >
+          InsightHub Editorial Group &bull; MMXXIV
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const nav = document.querySelector("[data-nav]");
+      const toggle = document.querySelector("[data-mobile-toggle]");
+      const menu = document.querySelector("[data-mobile-menu]");
+      const menuIcon = toggle?.querySelector("[data-menu-icon]");
+      const closeIcon = toggle?.querySelector("[data-close-icon]");
+
+      if (nav) {
+        const updateNav = () => {
+          const scrolled = window.scrollY > 50;
+          nav.classList.toggle("bg-white/90", scrolled);
+          nav.classList.toggle("backdrop-blur-md", scrolled);
+          nav.classList.toggle("py-4", scrolled);
+          nav.classList.toggle("shadow-sm", scrolled);
+          nav.classList.toggle("bg-transparent", !scrolled);
+          nav.classList.toggle("py-8", !scrolled);
+        };
+        updateNav();
+        window.addEventListener("scroll", updateNav, { passive: true });
+      }
+
+      if (toggle && menu && menuIcon && closeIcon) {
+        const setOpen = (open) => {
+          menu.classList.toggle("hidden", !open);
+          menuIcon.classList.toggle("hidden", open);
+          closeIcon.classList.toggle("hidden", !open);
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        };
+        setOpen(false);
+        toggle.addEventListener("click", () => {
+          setOpen(toggle.getAttribute("aria-expanded") !== "true");
+        });
+      }
+    })();
+  </script>
+</ContentLayout>

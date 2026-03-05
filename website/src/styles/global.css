@@ -7,6 +7,7 @@
     --color-primary: 37 99 235; /* blue-600 */
     --color-secondary: 139 92 246; /* purple-500 */
     --editorial-bg: #faf9f6;
+    --editorial-paper: #fafafa;
     --editorial-ink: #1a1a1a;
     --editorial-amber: #d97706;
   }
@@ -33,6 +34,10 @@
 
   .editorial-ink-bg {
     background-color: var(--editorial-ink);
+  }
+
+  .editorial-paper {
+    background-color: var(--editorial-paper);
   }
 
   .editorial-dark {
