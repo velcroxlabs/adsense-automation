@@ -92,7 +92,7 @@ website/
 ### ✅ **Infraestructura completamente operacional:**
 - **Build:** ✅ Funciona correctamente (9 páginas + sitemap + 3 categorías dinámicas)
 - **Deploy:** ✅ **¡SITIO EN PRODUCCIÓN CON CI/CD AUTOMÁTICO!** 
-- **URL:** ✅ **https://adsense-automation-498b2rjjp-velcroxlabs-projects.vercel.app**
+- **URL:** ✅ **https://adsense-automation-hk7buxtqi-velcroxlabs-projects.vercel.app**
 - **Base de datos:** ✅ Esquema ejecutado, conexión verificada (5 tablas)
 - **CI/CD:** ✅ GitHub Actions + Vercel auto-deploy configurado
 - **Variables entorno:** ✅ **SUPABASE_URL** y **SUPABASE_ANON_KEY** en Vercel
