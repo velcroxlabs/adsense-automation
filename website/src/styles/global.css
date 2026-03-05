@@ -16,51 +16,27 @@
   }
 
   body {
-    @apply antialiased;
-  }
-
-  /* Improve text rendering */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
-  }
-
-  h1 {
-    @apply text-4xl md:text-5xl;
-  }
-
-  h2 {
-    @apply text-3xl md:text-4xl;
-  }
-
-  h3 {
-    @apply text-2xl md:text-3xl;
-  }
-
-  /* Article content styling */
-  .article-content {
-    @apply prose prose-lg max-w-none prose-headings:font-bold prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-img:rounded-lg prose-blockquote:border-l-4 prose-blockquote:border-blue-400 prose-blockquote:pl-4 prose-blockquote:italic;
-  }
-
-  /* Custom utilities */
-  .container-narrow {
-    @apply max-w-4xl mx-auto;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
-  .btn {
-    @apply px-6 py-3 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+  .editorial-bg {
+    background-color: var(--editorial-bg);
   }
 
-  .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  .editorial-ink {
+    color: var(--editorial-ink);
   }
 
-  .btn-secondary {
-    @apply bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400;
+  .editorial-ink-bg {
+    background-color: var(--editorial-ink);
   }
 
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
+  .editorial-dark {
+    background-color: #121212;
   }
+
 }
