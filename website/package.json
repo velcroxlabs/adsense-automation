@@ -1,0 +1,39 @@
+{
+  "name": "adsense-automation-website",
+  "version": "1.0.0",
+  "description": "Automated content website for AdSense monetization",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "npm run build",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "astro",
+    "adsense",
+    "automation",
+    "seo",
+    "content"
+  ],
+  "author": "AdSense Automation",
+  "license": "MIT",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@supabase/supabase-js": "^2.98.0",
+    "astro": "^5.18.0",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^22.19.13",
+    "eslint": "^9.39.3",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
+  }
+}
