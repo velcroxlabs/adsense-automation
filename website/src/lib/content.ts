@@ -125,6 +125,7 @@ const mapRowToWebsiteArticle = (row: ArticleRow): WebsiteArticle => {
 export const getPublishedArticles = async (limit = 50): Promise<WebsiteArticle[]> => {
   const supabase = getSupabaseServerClient();
   if (!supabase) {
+    console.warn("[content] Supabase client unavailable. Check SUPABASE_URL and SUPABASE_ANON_KEY.");
     return [];
   }
 
@@ -136,15 +137,18 @@ export const getPublishedArticles = async (limit = 50): Promise<WebsiteArticle[]
     .limit(limit);
 
   if (error || !data) {
+    console.warn("[content] Failed to fetch published articles.", error?.message ?? "No data returned.");
     return [];
   }
 
+  console.info(`[content] Loaded ${data.length} published article(s) from Supabase.`);
   return (data as ArticleRow[]).map(mapRowToWebsiteArticle);
 };
 
 export const getPublishedArticleSlugs = async (): Promise<string[]> => {
   const supabase = getSupabaseServerClient();
   if (!supabase) {
+    console.warn("[content] Supabase client unavailable while loading article slugs.");
     return [];
   }
 
@@ -155,12 +159,16 @@ export const getPublishedArticleSlugs = async (): Promise<string[]> => {
     .order("published_at", { ascending: false });
 
   if (error || !data) {
+    console.warn("[content] Failed to fetch article slugs.", error?.message ?? "No data returned.");
     return [];
   }
 
-  return data
+  const slugs = data
     .map((entry) => (typeof entry.slug === "string" ? entry.slug : null))
     .filter((value): value is string => value !== null);
+
+  console.info(`[content] Loaded ${slugs.length} published article slug(s) from Supabase.`);
+  return slugs;
 };
 
 export const getPublishedArticleBySlug = async (
@@ -168,6 +176,7 @@ export const getPublishedArticleBySlug = async (
 ): Promise<WebsiteArticle | null> => {
   const supabase = getSupabaseServerClient();
   if (!supabase) {
+    console.warn(`[content] Supabase client unavailable while loading article slug "${slug}".`);
     return null;
   }
 
@@ -179,9 +188,14 @@ export const getPublishedArticleBySlug = async (
     .maybeSingle();
 
   if (error || !data) {
+    console.warn(
+      `[content] Failed to fetch article "${slug}".`,
+      error?.message ?? "No published row returned.",
+    );
     return null;
   }
 
+  console.info(`[content] Loaded article "${slug}" from Supabase.`);
   return mapRowToWebsiteArticle(data as ArticleRow);
 };
 

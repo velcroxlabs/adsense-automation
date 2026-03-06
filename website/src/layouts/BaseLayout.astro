@@ -1,5 +1,4 @@
 ---
-import type { Props } from "astro";
 import { getPublishedArticles } from "../lib/content";
 import "../styles/global.css";
 
@@ -17,7 +16,7 @@ const {
   canonicalUrl,
   ogImage = "/default-og.jpg",
   noindex = false,
-} = Astro.props;
+} = Astro.props as Props;
 
 const categories = [
   { label: "Personal Finance", href: "/category/personal-finance" },
