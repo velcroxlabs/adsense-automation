@@ -7,9 +7,10 @@ Safe to run multiple times - uses upsert logic.
 import os
 import sys
 from datetime import datetime, timezone, timedelta
-from dotenv import load_dotenv
+from article_images import choose_featured_image
+from env_utils import load_project_env
 
-load_dotenv()
+load_project_env()
 
 def check_prerequisites():
     """Check if Supabase credentials are available."""
@@ -121,6 +122,7 @@ def seed_articles(supabase):
             "excerpt": "Learn practical tips to boost your savings rate and build financial security faster than you thought possible.",
             "content": "This is a sample article about saving money fast. In production, this would be AI-generated content with detailed information, tips, and actionable advice.",
             "keyword_id": keyword_ids.get("how to save money fast"),
+            "featured_image": choose_featured_image("personal finance", "how-to-save-money-fast"),
             "status": "published",
             "published_at": (datetime.now(timezone.utc) - timedelta(days=2)).isoformat(),
             "metadata": {
@@ -128,6 +130,7 @@ def seed_articles(supabase):
                 "reading_time": 5,
                 "niche": "personal finance",
                 "seed_keyword": "how to save money fast",
+                "image": choose_featured_image("personal finance", "how-to-save-money-fast"),
             }
         },
         {
@@ -136,6 +139,7 @@ def seed_articles(supabase):
             "excerpt": "Compare the top travel credit cards and find the perfect one for your next adventure.",
             "content": "This is a sample article about travel credit cards. In production, this would include detailed comparisons, benefits analysis, and application tips.",
             "keyword_id": keyword_ids.get("best credit cards for travel"),
+            "featured_image": choose_featured_image("personal finance", "best-credit-cards-for-travel"),
             "status": "published",
             "published_at": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
             "metadata": {
@@ -143,6 +147,7 @@ def seed_articles(supabase):
                 "reading_time": 7,
                 "niche": "personal finance",
                 "seed_keyword": "best credit cards for travel",
+                "image": choose_featured_image("personal finance", "best-credit-cards-for-travel"),
             }
         },
         {
@@ -151,6 +156,7 @@ def seed_articles(supabase):
             "excerpt": "Step-by-step instructions to repair common faucet types and save hundreds on plumber bills.",
             "content": "This is a sample article about fixing leaky faucets. In production, this would include detailed instructions, tool lists, and troubleshooting tips.",
             "keyword_id": keyword_ids.get("how to fix a leaky faucet"),
+            "featured_image": choose_featured_image("home improvement", "how-to-fix-leaky-faucet"),
             "status": "draft",
             "published_at": None,
             "metadata": {
@@ -158,6 +164,7 @@ def seed_articles(supabase):
                 "reading_time": 5,
                 "niche": "home improvement",
                 "seed_keyword": "how to fix a leaky faucet",
+                "image": choose_featured_image("home improvement", "how-to-fix-leaky-faucet"),
             }
         },
     ]
@@ -167,12 +174,32 @@ def seed_articles(supabase):
         try:
             # Check if article already exists
             existing = supabase.table('articles')\
-                .select('id')\
+                .select('id, featured_image, metadata')\
                 .eq('slug', article_data['slug'])\
                 .execute()
             
             if existing.data and len(existing.data) > 0:
-                print(f"  ✓ Article '{article_data['slug']}' already exists")
+                existing_row = existing.data[0]
+                existing_metadata = existing_row.get('metadata') or {}
+                needs_image_update = (
+                    not existing_row.get('featured_image')
+                    or not existing_metadata.get('image')
+                )
+
+                if needs_image_update:
+                    merged_metadata = dict(existing_metadata)
+                    merged_metadata.setdefault('image', article_data['featured_image'])
+
+                    supabase.table('articles')\
+                        .update({
+                            'featured_image': article_data['featured_image'],
+                            'metadata': merged_metadata,
+                        })\
+                        .eq('id', existing_row['id'])\
+                        .execute()
+                    print(f"  ✓ Backfilled image for existing article '{article_data['slug']}'")
+                else:
+                    print(f"  ✓ Article '{article_data['slug']}' already exists")
                 continue
             
             # Insert new article
