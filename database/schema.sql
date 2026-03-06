@@ -22,6 +22,7 @@ CREATE TABLE articles (
     slug TEXT UNIQUE NOT NULL,
     content TEXT,
     excerpt TEXT,
+    featured_image TEXT,
     keyword_id UUID REFERENCES keywords(id) ON DELETE SET NULL,
     status TEXT DEFAULT 'draft', -- 'draft', 'published', 'scheduled'
     published_at TIMESTAMP WITH TIME ZONE,

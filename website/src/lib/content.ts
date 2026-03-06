@@ -23,9 +23,15 @@ type ArticleRow = {
   slug: string;
   content: string | null;
   published_at: string | null;
+  featured_image: string | null;
   metadata: Record<string, unknown> | null;
   keywords: KeywordRelation;
 };
+
+const ARTICLE_SELECT_WITH_FEATURED_IMAGE =
+  "title,excerpt,slug,content,published_at,featured_image,metadata,keywords(seed_niche)";
+const ARTICLE_SELECT_LEGACY =
+  "title,excerpt,slug,content,published_at,metadata,keywords(seed_niche)";
 
 export type WebsiteArticle = {
   title: string;
@@ -115,7 +121,10 @@ const mapRowToWebsiteArticle = (row: ArticleRow): WebsiteArticle => {
       : "RECENT EDITION",
     readTimeLabel: `${readTimeMinutes} min read`,
     author: asString(metadata.author) ?? "Editorial Staff",
-    image: asString(metadata.image) ?? FALLBACK_IMAGES[categorySlug],
+    image:
+      asString(row.featured_image) ??
+      asString(metadata.image) ??
+      FALLBACK_IMAGES[categorySlug],
     niche,
     categorySlug,
     wordCount,
@@ -129,12 +138,21 @@ export const getPublishedArticles = async (limit = 50): Promise<WebsiteArticle[]
     return [];
   }
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("articles")
-    .select("title,excerpt,slug,content,published_at,metadata,keywords(seed_niche)")
+    .select(ARTICLE_SELECT_WITH_FEATURED_IMAGE)
     .eq("status", "published")
     .order("published_at", { ascending: false })
     .limit(limit);
+
+  if (error?.message?.includes("featured_image does not exist")) {
+    ({ data, error } = await supabase
+      .from("articles")
+      .select(ARTICLE_SELECT_LEGACY)
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(limit));
+  }
 
   if (error || !data) {
     console.warn("[content] Failed to fetch published articles.", error?.message ?? "No data returned.");
@@ -180,12 +198,21 @@ export const getPublishedArticleBySlug = async (
     return null;
   }
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("articles")
-    .select("title,excerpt,slug,content,published_at,metadata,keywords(seed_niche)")
+    .select(ARTICLE_SELECT_WITH_FEATURED_IMAGE)
     .eq("status", "published")
     .eq("slug", slug)
     .maybeSingle();
+
+  if (error?.message?.includes("featured_image does not exist")) {
+    ({ data, error } = await supabase
+      .from("articles")
+      .select(ARTICLE_SELECT_LEGACY)
+      .eq("status", "published")
+      .eq("slug", slug)
+      .maybeSingle());
+  }
 
   if (error || !data) {
     console.warn(
