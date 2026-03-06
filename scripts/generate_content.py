@@ -15,6 +15,14 @@ from typing import Dict, List, Optional, Any
 from dotenv import load_dotenv
 load_dotenv()
 
+# Try to import OpenAI for LLM content generation
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
+    print("⚠️  OpenAI library not installed. Install with: pip install openai")
+
 def load_keywords(csv_path: str) -> List[Dict[str, Any]]:
     """Load keywords from CSV file."""
     keywords = []
@@ -44,6 +52,79 @@ def create_slug(keyword: str) -> str:
     slug = '-'.join(filter(None, slug.split('-')))  # Remove empty segments
     return slug[:100]  # Limit length
 
+def generate_content_with_openai(keyword: str, niche: str, intent: str) -> str:
+    """Generate article content using OpenAI API."""
+    if not OPENAI_AVAILABLE:
+        return None
+    
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        print("  ⚠️  OPENAI_API_KEY not found in .env")
+        return None
+    
+    try:
+        client = OpenAI(api_key=api_key)
+        
+        # Create prompt based on intent and niche
+        if intent == 'commercial':
+            prompt = f"""Write a comprehensive, SEO-optimized article about '{keyword}' for a {niche} website.
+            The article should be a review and buying guide that helps readers make informed decisions.
+            Include:
+            1. Introduction explaining the importance of {keyword}
+            2. Key features to look for
+            3. Top 3-5 options with pros and cons
+            4. Comparison table
+            5. Buying considerations
+            6. Conclusion with recommendations
+            7. FAQ section
+            
+            Write in a professional, helpful tone. Target 1000-1200 words."""
+        elif intent == 'transactional':
+            prompt = f"""Write a detailed, SEO-optimized article about '{keyword}' for a {niche} website.
+            The article should help readers compare options and make purchasing decisions.
+            Include:
+            1. Introduction to {keyword} and its importance
+            2. Key factors to consider when choosing
+            3. Price ranges and value considerations
+            4. Where to buy (online/offline options)
+            5. Tips for getting the best deal
+            6. Conclusion with actionable advice
+            7. FAQ section
+            
+            Write in a practical, informative tone. Target 800-1000 words."""
+        else:  # informational
+            prompt = f"""Write a comprehensive, SEO-optimized guide about '{keyword}' for a {niche} website.
+            The article should educate readers with complete information.
+            Include:
+            1. Introduction explaining what {keyword} is
+            2. Key concepts and terminology
+            3. Step-by-step guide or detailed explanation
+            4. Common mistakes to avoid
+            5. Best practices and tips
+            6. Advanced considerations (if applicable)
+            7. Conclusion summarizing key points
+            8. FAQ section
+            
+            Write in an authoritative yet accessible tone. Target 1200-1500 words."""
+        
+        response = client.chat.completions.create(
+            model="gpt-4-turbo-preview",
+            messages=[
+                {"role": "system", "content": "You are a professional content writer creating SEO-optimized articles for a blog. Write in clear, engaging English with proper markdown formatting."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=3000
+        )
+        
+        content = response.choices[0].message.content
+        print(f"  ✅ Generated content with OpenAI ({len(content)} characters)")
+        return content
+    
+    except Exception as e:
+        print(f"  ❌ OpenAI API error: {e}")
+        return None
+
 def generate_article_structure(keyword_data: Dict[str, Any]) -> Dict[str, Any]:
     """Generate article structure from keyword data."""
     keyword = keyword_data.get('keyword', '')
@@ -61,27 +142,42 @@ def generate_article_structure(keyword_data: Dict[str, Any]) -> Dict[str, Any]:
     
     slug = create_slug(keyword)
     
-    # Generate placeholder content structure
-    word_count = 800  # Target word count
+    # Try to generate content with OpenAI
+    ai_content = generate_content_with_openai(keyword, niche, intent)
+    
+    if ai_content:
+        content = ai_content
+        word_count = len(ai_content.split())
+        requires_llm = False
+        print(f"  ✅ AI-generated content ({word_count} words)")
+    else:
+        # Generate placeholder content structure
+        word_count = 800  # Target word count
+        content = f"<!-- PLACEHOLDER CONTENT FOR: {keyword} -->\n\n"
+        content += f"This article will be automatically generated about {keyword}. "
+        content += f"The final content will include detailed information, tips, and practical advice.\n\n"
+        content += f"**Expected sections:**\n"
+        content += f"1. Introduction to {keyword}\n"
+        content += f"2. Key concepts and terminology\n"
+        content += f"3. Step-by-step guide\n"
+        content += f"4. Common mistakes to avoid\n"
+        content += f"5. Best practices and tips\n"
+        content += f"6. Frequently asked questions\n\n"
+        content += f"*Note: This is a placeholder. The final article will be generated by AI "
+        content += f"and will be 100% unique, informative, and SEO-optimized.*"
+        requires_llm = True
+        print(f"  ⚠️  Using placeholder content (AI generation not available)")
+    
+    # Create excerpt
+    excerpt = f"Learn everything about {keyword}. This comprehensive guide covers all aspects you need to know."
     
     # Create article structure
     article = {
         'id': str(uuid.uuid4()),
         'title': title,
         'slug': slug,
-        'excerpt': f"Learn everything about {keyword}. This comprehensive guide covers all aspects you need to know.",
-        'content': f"<!-- PLACEHOLDER CONTENT FOR: {keyword} -->\n\n"
-                  f"This article will be automatically generated about {keyword}. "
-                  f"The final content will include detailed information, tips, and practical advice.\n\n"
-                  f"**Expected sections:**\n"
-                  f"1. Introduction to {keyword}\n"
-                  f"2. Key concepts and terminology\n"
-                  f"3. Step-by-step guide\n"
-                  f"4. Common mistakes to avoid\n"
-                  f"5. Best practices and tips\n"
-                  f"6. Frequently asked questions\n\n"
-                  f"*Note: This is a placeholder. The final article will be generated by AI "
-                  f"and will be 100% unique, informative, and SEO-optimized.*",
+        'excerpt': excerpt,
+        'content': content,
         'keyword_id': None,  # Will be set when keyword is inserted to DB
         'status': 'draft',
         'published_at': None,
@@ -98,7 +194,8 @@ def generate_article_structure(keyword_data: Dict[str, Any]) -> Dict[str, Any]:
             'competition': keyword_data.get('competition', 'low'),
             'intent': intent,
             'generated_at': datetime.now(timezone.utc).isoformat(),
-            'requires_llm': True  # Flag for later LLM processing
+            'requires_llm': requires_llm,
+            'ai_generated': ai_content is not None
         }
     }
     
@@ -257,7 +354,7 @@ def main():
             print(f"  • Database: Supabase")
     
     print("\n🚀 Next steps:")
-    print("1. For LLM content generation: Add OpenAI/Anthropic API keys")
+    print("1. For LLM content generation: OpenAI API key detected in .env")
     print("2. Review generated articles in database or files")
     print("3. Publish articles by changing status to 'published'")
     print("4. Deploy website to see articles live")
