@@ -10,7 +10,7 @@
     --editorial-paper: #fafafa;
     --editorial-ink: #1a1a1a;
     --editorial-amber: #d97706;
-    --editorial-stage: 1060px;
+    --editorial-stage: 1480px;
     --editorial-wide: 1180px;
   }
 
@@ -70,4 +70,13 @@
     width: 100%;
   }
 
+  .curated-carousel-track {
+    transform: translate3d(0, 0, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .curated-carousel-track {
+      transition: none !important;
+    }
+  }
 }
