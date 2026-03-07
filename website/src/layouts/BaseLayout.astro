@@ -26,18 +26,6 @@ const categories = [
   { label: "Technology", href: "/stats" },
 ];
 
-type FeaturedPost = {
-  id: number;
-  category: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  author?: string;
-  image: string;
-  href: string;
-};
-
 const categoryLabelBySlug: Record<string, string> = {
   "personal-finance": "Personal Finance",
   "home-improvement": "Home Improvement",
