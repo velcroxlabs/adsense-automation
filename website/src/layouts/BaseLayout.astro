@@ -334,12 +334,12 @@ const featuredPosts = dbFeaturedPosts.length > 0 ? dbFeaturedPosts : fallbackFea
           </div>
 
           <div class="group relative mx-auto max-w-fit overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2">
-            <div class="flex flex-col lg:flex-row">
+            <div class="flex flex-col lg:flex-row lg:items-start">
               <div class="overflow-hidden lg:w-3/5">
                 <img
                   src={heroPost.image}
                   alt={heroPost.title}
-                  class="h-[300px] w-full object-cover transition-transform duration-1000 group-hover:scale-105 md:h-[390px] lg:h-full lg:min-h-[390px] xl:min-h-[420px]"
+                  class="h-[300px] w-full object-cover transition-transform duration-1000 group-hover:scale-105 md:h-[420px] lg:h-[600px]"
                 />
               </div>
               <div class="flex flex-col justify-center p-8 lg:w-2/5 lg:p-12">
