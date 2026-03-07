@@ -55,7 +55,7 @@ def create_slug(keyword: str) -> str:
 
 
 def generate_content_with_openai(keyword: str, niche: str, intent: str) -> Optional[str]:
-    """Generate article content using OpenAI API."""
+    """Generate high-end, premium article content using OpenAI API."""
     if not OPENAI_AVAILABLE:
         return None
 
@@ -67,67 +67,77 @@ def generate_content_with_openai(keyword: str, niche: str, intent: str) -> Optio
     try:
         client = OpenAI(api_key=api_key)
 
+        # Style Guide for Premium UX
+        style_guide = """
+        - NO fluff. NO 'In today's digital world' or 'It is important to note'.
+        - Use "Sentence Case" for headings.
+        - Use <blockquote> for key insights.
+        - Use bolding for technical terms, never for whole sentences.
+        - Keep paragraphs under 3 sentences for mobile readability.
+        - If a list has more than 4 items, use a structured table or sub-headings.
+        """
+
+        # Intent-specific logic
         if intent == "commercial":
-            prompt = f"""Write a high-engagement article about '{keyword}' for a {niche} website.
-            The article should be a sharp review and buying guide that stays credible and useful.
-            Include:
-            1. A strong introduction that hooks the reader immediately
-            2. Unexpected or non-obvious observations about {keyword}
-            3. Top 3-5 options ranked with clear opinions and tradeoffs
-            4. A comparison table
-            5. Buying considerations that challenge weak conventional advice
-            6. A conclusion with concrete recommendations
-            7. An FAQ section
-
-            Write in a bold but professional tone. Target 1000-1200 words."""
+            structure = f"""
+            1. Quick Summary Table (Feature | Verdict | Rating)
+            2. The 'Why This Matters' Hook (Short & Punchy)
+            3. Detailed Analysis of '{keyword}'
+            4. The Competition (Trade-offs)
+            5. Final Recommendation
+            """
         elif intent == "transactional":
-            prompt = f"""Write a compelling article about '{keyword}' for a {niche} website.
-            The article should help readers compare options and make a decision.
-            Include:
-            1. A direct introduction that questions common assumptions
-            2. Key decision factors with practical advice
-            3. Price ranges and value considerations
-            4. Where to buy with realistic tips
-            5. How to avoid overpaying
-            6. A conclusion with actionable advice
-            7. An FAQ section
+            structure = f"""
+            1. Instant Value Check (Is it worth the price?)
+            2. Where to Buy & Best Deals
+            3. Avoiding Common Scams/Overpricing
+            4. Warranty & Long-term Value
+            """
+        else: # Informational
+            structure = f"""
+            1. Executive Summary (Key Takeaways)
+            2. The Core Concept (Explained like a pro)
+            3. Step-by-Step Implementation Framework
+            4. Expert-level Pitfalls to Avoid
+            """
 
-            Write in a confident, high-clarity tone. Target 800-1000 words."""
-        else:
-            prompt = f"""Write an engaging guide about '{keyword}' for a {niche} website.
-            The article should educate readers with useful, differentiated insight.
-            Include:
-            1. A surprising introduction
-            2. Key concepts explained clearly
-            3. A step-by-step guide or detailed framework
-            4. Common mistakes and their consequences
-            5. Best practices
-            6. Advanced considerations
-            7. A conclusion with memorable takeaways
-            8. An FAQ section
+        prompt = f"""
+        Write a premium article for a '{niche}' website about '{keyword}'.
+        
+        Required Structure:
+        {structure}
 
-            Write in an authoritative but readable tone. Target 1200-1500 words."""
+        Style Requirements:
+        {style_guide}
+
+        Tone: Authoritative, Minimalist, and Sophisticated. 
+        Target: {1200 if intent == 'informational' else 800} words.
+        Format: Clean Markdown only.
+        """
 
         response = client.chat.completions.create(
             model=os.getenv("OPENAI_MODEL", "gpt-4o"),
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a professional content writer creating SEO-oriented articles with strong hooks, clear structure, and readable markdown.",
+                    "content": (
+                        "You are a senior editorial director for a premium tech and lifestyle magazine. "
+                        "You value brevity, data-driven insights, and clean information architecture. "
+                        "You never use AI clichés or 'journey' metaphors."
+                    )
                 },
                 {"role": "user", "content": prompt},
             ],
-            temperature=0.75,
+            temperature=0.7, # Lowered slightly for more consistent, professional output
             max_tokens=3500,
         )
 
         content = response.choices[0].message.content
-        print(f"  Generated content with OpenAI ({len(content)} characters)")
+        print(f"  Generated premium content ({len(content)} characters)")
         return content
     except Exception as exc:
         print(f"  OpenAI API error: {exc}")
         return None
-
 
 def generate_article_structure(keyword_data: Dict[str, Any]) -> Dict[str, Any]:
     """Generate article structure from keyword data."""
