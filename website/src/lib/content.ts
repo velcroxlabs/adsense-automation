@@ -43,9 +43,11 @@ export type WebsiteArticle = {
   readTimeLabel: string;
   author: string;
   image: string;
+  featuredImage: string;
   niche: string;
   categorySlug: CategorySlug;
   wordCount: number;
+  tags: string[];
 };
 
 const FALLBACK_IMAGE_POOLS: Record<CategorySlug, string[]> = {
@@ -146,6 +148,14 @@ const mapRowToWebsiteArticle = (row: ArticleRow): WebsiteArticle => {
   const niche = getSeedNiche(row.keywords);
   const categorySlug = nicheToCategorySlug(niche);
   const metadata = asObject(row.metadata);
+  const author = asString(metadata.author) ?? "Editorial Staff";
+  const featuredImage =
+    asString(row.featured_image) ??
+    asString(metadata.image) ??
+    pickFallbackImage(categorySlug, row.slug);
+  const tags = Array.isArray(metadata.tags)
+    ? metadata.tags.filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+    : [];
 
   const content =
     asString(row.content) ??
@@ -168,14 +178,13 @@ const mapRowToWebsiteArticle = (row: ArticleRow): WebsiteArticle => {
           .toUpperCase()
       : "RECENT EDITION",
     readTimeLabel: `${readTimeMinutes} min read`,
-    author: asString(metadata.author) ?? "Editorial Staff",
-    image:
-      asString(row.featured_image) ??
-      asString(metadata.image) ??
-      pickFallbackImage(categorySlug, row.slug),
+    author,
+    image: featuredImage,
+    featuredImage,
     niche,
     categorySlug,
     wordCount,
+    tags,
   };
 };
 

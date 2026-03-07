@@ -38,74 +38,6 @@ type FeaturedPost = {
   href: string;
 };
 
-const fallbackFeaturedPosts: FeaturedPost[] = [
-  {
-    id: 1,
-    category: "Personal Finance",
-    title: "The Architecture of Wealth: Strategic Asset Allocation in 2024",
-    excerpt:
-      "Moving beyond simple diversification to build a resilient portfolio in a volatile global economy.",
-    author: "Julianne Vane",
-    date: "Mar 12, 2024",
-    readTime: "8 min read",
-    image:
-      "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800",
-    href: "/category/personal-finance",
-  },
-  {
-    id: 2,
-    category: "Health & Wellness",
-    title: "Biohacking the Circadian Rhythm for Peak Performance",
-    excerpt:
-      "How light exposure and nutrient timing can redefine your biological clock and daily energy levels.",
-    author: "Dr. Marcus Thorne",
-    date: "Mar 10, 2024",
-    readTime: "12 min read",
-    image:
-      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800",
-    href: "/category/health-wellness",
-  },
-  {
-    id: 3,
-    category: "Home Improvement",
-    title: "Minimalist Aesthetics: The Psychology of Quiet Luxury in Design",
-    excerpt:
-      "Why less is more when it comes to creating a sanctuary that promotes mental clarity.",
-    author: "Elena Rossi",
-    date: "Mar 08, 2024",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=800",
-    href: "/category/home-improvement",
-  },
-  {
-    id: 4,
-    category: "Personal Finance",
-    title: "Estate Planning Essentials for High-Income Families",
-    excerpt:
-      "A practical framework for trusts, tax exposure, and generational transfer without unnecessary complexity.",
-    author: "Camille Rowe",
-    date: "Mar 06, 2024",
-    readTime: "7 min read",
-    image:
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800",
-    href: "/category/personal-finance",
-  },
-  {
-    id: 5,
-    category: "Home Improvement",
-    title: "Kitchen Lighting Layouts That Improve Function and Atmosphere",
-    excerpt:
-      "How to combine task, ambient, and accent lighting for a space that works hard and still feels refined.",
-    author: "Noah Bennett",
-    date: "Mar 04, 2024",
-    readTime: "5 min read",
-    image:
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
-    href: "/category/home-improvement",
-  },
-];
-
 const categoryLabelBySlug: Record<string, string> = {
   "personal-finance": "Personal Finance",
   "home-improvement": "Home Improvement",
@@ -113,18 +45,6 @@ const categoryLabelBySlug: Record<string, string> = {
 };
 
 const latestArticles = await getPublishedArticles(6);
-
-const fallbackHero = {
-  category: "Trending in Finance",
-  title: "The New Economics of Sustainable Luxury",
-  excerpt:
-    "How high-net-worth individuals are shifting their consumption habits towards longevity and ethical craftsmanship over traditional status symbols.",
-  author: "Alexander Pierce",
-  image:
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-  href: "/about",
-};
-
 const heroPost = latestArticles[0]
   ? {
       category: categoryLabelBySlug[latestArticles[0].categorySlug] ?? "Editorial",
@@ -134,7 +54,7 @@ const heroPost = latestArticles[0]
       image: latestArticles[0].image,
       href: `/article/${latestArticles[0].slug}`,
     }
-  : fallbackHero;
+  : null;
 
 const dbFeaturedPosts = latestArticles.slice(1).map((article, index) => ({
   id: index + 1,
@@ -154,16 +74,7 @@ const dbFeaturedPosts = latestArticles.slice(1).map((article, index) => ({
   href: `/article/${article.slug}`,
 }));
 
-const featuredPosts =
-  dbFeaturedPosts.length > 0
-    ? [
-        ...dbFeaturedPosts,
-        ...fallbackFeaturedPosts.slice(
-          0,
-          Math.max(0, 5 - dbFeaturedPosts.length),
-        ),
-      ]
-    : fallbackFeaturedPosts;
+const featuredPosts = dbFeaturedPosts;
 ---
 
 <!doctype html>
@@ -368,79 +279,89 @@ const featuredPosts =
             </div>
           </div>
 
-          <div class="group relative mx-auto max-w-fit overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2">
-            <div class="flex flex-col lg:flex-row lg:items-start">
-              <div class="overflow-hidden lg:w-3/5">
-                <img
-                  src={heroPost.image}
-                  alt={heroPost.title}
-                  class="h-[300px] w-full object-cover transition-transform duration-1000 group-hover:scale-105 md:h-[420px] lg:h-[600px]"
-                />
-              </div>
-              <div class="flex flex-col justify-center p-8 lg:w-2/5 lg:p-12">
-                <div
-                  class="mb-4 flex items-center gap-2 font-sans text-[12px] font-bold uppercase tracking-[0.15em] text-amber-600"
-                >
-                  <svg
-                    class="h-[14px] w-[14px]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                  >
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                    <polyline points="17 6 23 6 23 12"></polyline>
-                  </svg>
-                  {heroPost.category}
-                </div>
-                <h2 class="mb-5 text-[clamp(2rem,2.9vw,2.8rem)] font-bold leading-[1.03] tracking-[-0.01em] transition-colors hover:text-amber-600">
-                  <a href={heroPost.href}>{heroPost.title}</a>
-                </h2>
-                <p
-                  class="mb-8 text-[clamp(1.05rem,1.1vw,1.18rem)] leading-[1.55] text-gray-500"
-                >
-                  {heroPost.excerpt}
-                </p>
-                <div
-                  class="mt-auto flex items-center justify-between border-t border-gray-100 pt-6"
-                >
-                  <div class="flex items-center gap-3">
+          {
+            heroPost ? (
+              <div class="group relative mx-auto max-w-fit overflow-hidden rounded-2xl bg-white shadow-2xl transition-transform duration-700 hover:-translate-y-2">
+                <div class="flex flex-col lg:flex-row lg:items-start">
+                  <div class="overflow-hidden lg:w-3/5">
+                    <img
+                      src={heroPost.image}
+                      alt={heroPost.title}
+                      class="h-[300px] w-full object-cover transition-transform duration-1000 group-hover:scale-105 md:h-[420px] lg:h-[600px]"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-center p-8 lg:w-2/5 lg:p-12">
                     <div
-                      class="h-10 w-10 overflow-hidden rounded-full bg-gray-200"
+                      class="mb-4 flex items-center gap-2 font-sans text-[12px] font-bold uppercase tracking-[0.15em] text-amber-600"
                     >
-                      <img
-                        src="https://i.pravatar.cc/150?u=1"
-                        alt="Author avatar"
-                        loading="lazy"
-                      />
+                      <svg
+                        class="h-[14px] w-[14px]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      >
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                      </svg>
+                      {heroPost.category}
                     </div>
-                    <div>
-                      <p class="font-sans text-sm font-bold">{heroPost.author}</p>
-                      <p class="font-sans text-xs text-gray-400">
-                        Editor-in-Chief
-                      </p>
+                    <h2 class="mb-5 text-[clamp(2rem,2.9vw,2.8rem)] font-bold leading-[1.03] tracking-[-0.01em] transition-colors hover:text-amber-600">
+                      <a href={heroPost.href}>{heroPost.title}</a>
+                    </h2>
+                    <p
+                      class="mb-8 text-[clamp(1.05rem,1.1vw,1.18rem)] leading-[1.55] text-gray-500"
+                    >
+                      {heroPost.excerpt}
+                    </p>
+                    <div
+                      class="mt-auto flex items-center justify-between border-t border-gray-100 pt-6"
+                    >
+                      <div class="flex items-center gap-3">
+                        <div
+                          class="h-10 w-10 overflow-hidden rounded-full bg-gray-200"
+                        >
+                          <img
+                            src="https://i.pravatar.cc/150?u=1"
+                            alt="Author avatar"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div>
+                          <p class="font-sans text-sm font-bold">{heroPost.author}</p>
+                          <p class="font-sans text-xs text-gray-400">
+                            Editorial Desk
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={heroPost.href}
+                        class="flex items-center gap-1 font-sans text-[13px] font-bold tracking-[0.16em] transition-transform group-hover:translate-x-2"
+                      >
+                        READ STORY
+                        <svg
+                          class="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        >
+                          <line x1="7" y1="17" x2="17" y2="7"></line>
+                          <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                      </a>
                     </div>
                   </div>
-                  <a
-                    href={heroPost.href}
-                    class="flex items-center gap-1 font-sans text-[13px] font-bold tracking-[0.16em] transition-transform group-hover:translate-x-2"
-                  >
-                    READ STORY
-                    <svg
-                      class="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                    >
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </a>
                 </div>
               </div>
-            </div>
-          </div>
+            ) : (
+              <div class="rounded-2xl border border-gray-200 bg-white/70 p-10 text-center shadow-sm">
+                <p class="font-sans text-[11px] font-bold uppercase tracking-[0.22em] text-gray-400">
+                  No published editorial features yet
+                </p>
+              </div>
+            )
+          }
         </div>
       </section>
 
@@ -466,7 +387,7 @@ const featuredPosts =
               >
                 VIEW ARCHIVE
               </a>
-              <div class="hidden items-center gap-2 md:flex">
+              <div class:list={["hidden items-center gap-2 md:flex", featuredPosts.length <= 1 && "md:hidden"]}>
                 <button
                   type="button"
                   data-carousel-prev
@@ -510,78 +431,88 @@ const featuredPosts =
             class="relative overflow-hidden"
             aria-label="Curated Reading articles"
           >
-            <div
-              data-carousel-slides
-              class="grid gap-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
             {
-              featuredPosts.slice(0, 4).map((post) => (
-                <article
-                  class="group cursor-pointer"
-                >
-                  <a href={post.href} class="block">
-                    <div class="relative mb-6 aspect-square overflow-hidden rounded-xl">
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        loading="lazy"
-                        class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div class="absolute left-4 top-4">
-                        <span class="rounded bg-white/90 px-3 py-1 font-sans text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur-sm">
-                          {post.category}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        class="absolute bottom-4 right-4 rounded-full bg-white/20 p-3 text-white opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100"
-                        aria-label="Bookmark article"
-                      >
-                        <svg
-                          class="h-[18px] w-[18px]"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.8"
-                        >
-                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                        </svg>
-                      </button>
-                    </div>
-                    <div class="mb-3 flex items-center gap-4 font-sans text-[11px] uppercase tracking-[0.14em] text-gray-400">
-                      <span class="flex items-center gap-1">
-                        <svg
-                          class="h-3 w-3"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.8"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        {post.readTime}
-                      </span>
-                      <span>&bull;</span>
-                      <span>{post.date}</span>
-                    </div>
-                    <h4 class="mb-3 text-[clamp(1.1rem,2.6vw,2rem)] font-bold leading-[1.08] transition-colors group-hover:text-amber-700">
-                      {post.title}
-                    </h4>
-                    <p class="line-clamp-3 text-[clamp(1.06rem,1.05vw,1.25rem)] leading-[1.55] text-gray-500">
-                      {post.excerpt}
-                    </p>
-                  </a>
-                </article>
-              ))
+              featuredPosts.length > 0 ? (
+                <>
+                  <div
+                    data-carousel-slides
+                    class="grid gap-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  >
+                  {
+                    featuredPosts.slice(0, 4).map((post) => (
+                      <article class="group cursor-pointer">
+                        <a href={post.href} class="block">
+                          <div class="relative mb-6 aspect-square overflow-hidden rounded-xl">
+                            <img
+                              src={post.image}
+                              alt={post.title}
+                              loading="lazy"
+                              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div class="absolute left-4 top-4">
+                              <span class="rounded bg-white/90 px-3 py-1 font-sans text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur-sm">
+                                {post.category}
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              class="absolute bottom-4 right-4 rounded-full bg-white/20 p-3 text-white opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100"
+                              aria-label="Bookmark article"
+                            >
+                              <svg
+                                class="h-[18px] w-[18px]"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                              >
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                              </svg>
+                            </button>
+                          </div>
+                          <div class="mb-3 flex items-center gap-4 font-sans text-[11px] uppercase tracking-[0.14em] text-gray-400">
+                            <span class="flex items-center gap-1">
+                              <svg
+                                class="h-3 w-3"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                              </svg>
+                              {post.readTime}
+                            </span>
+                            <span>&bull;</span>
+                            <span>{post.date}</span>
+                          </div>
+                          <h4 class="mb-3 text-[clamp(1.1rem,2.6vw,2rem)] font-bold leading-[1.08] transition-colors group-hover:text-amber-700">
+                            {post.title}
+                          </h4>
+                          <p class="line-clamp-3 text-[clamp(1.06rem,1.05vw,1.25rem)] leading-[1.55] text-gray-500">
+                            {post.excerpt}
+                          </p>
+                        </a>
+                      </article>
+                    ))
+                  }
+                  </div>
+                  <script
+                    type="application/json"
+                    data-carousel-data
+                    set:html={JSON.stringify(featuredPosts).replace(/</g, "\\u003c")}
+                  >
+                  </script>
+                </>
+              ) : (
+                <div class="rounded-2xl border border-gray-200 bg-gray-50/70 p-10 text-center">
+                  <p class="font-sans text-[11px] font-bold uppercase tracking-[0.22em] text-gray-400">
+                    No published insights available yet
+                  </p>
+                </div>
+              )
             }
-            </div>
-            <script
-              type="application/json"
-              data-carousel-data
-              set:html={JSON.stringify(featuredPosts).replace(/</g, "\\u003c")}
-            >
-            </script>
           </div>
         </div>
       </section>
@@ -1058,7 +989,7 @@ const featuredPosts =
           `;
 
           const render = () => {
-            const visibleCount = getVisibleCount();
+            const visibleCount = Math.min(getVisibleCount(), posts.length);
             const visiblePosts = Array.from({ length: visibleCount }, (_, offset) =>
               posts[(index + offset) % posts.length]
             );
@@ -1073,7 +1004,7 @@ const featuredPosts =
 
           const startAutoAdvance = () => {
             stopAutoAdvance();
-            if (posts.length > 1) {
+            if (posts.length > getVisibleCount()) {
               autoAdvanceId = window.setInterval(() => move(1), 4200);
             }
           };

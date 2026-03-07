@@ -4,6 +4,7 @@ import {
   getPublishedArticleBySlug,
   getPublishedArticleSlugs,
 } from "../../lib/content";
+import { renderMarkdown } from "../../lib/markdown";
 
 type NicheMeta = {
   label: string;
@@ -70,8 +71,7 @@ const getNicheMeta = (niche: string): NicheMeta => {
   };
 };
 
-const meta = getNicheMeta(article.metadata?.niche || '');
-const readTime = article.metadata?.word_count ? Math.ceil(article.metadata.word_count / 200) : 4;
+const meta = getNicheMeta(article.niche);
 const publishDate = article.publishedAt
   ? new Date(article.publishedAt).toLocaleDateString("en-US", {
       month: "long",
@@ -80,11 +80,8 @@ const publishDate = article.publishedAt
     })
   : "Recent Edition";
 
-const tags = ["Strategy", "Innovation", article.metadata?.niche || "Insights", "Analysis"];
-const articleParagraphs = article.content
-  .split(/\n{2,}/)
-  .map((paragraph) => paragraph.trim())
-  .filter(Boolean);
+const tags = article.tags.length > 0 ? article.tags : [meta.label, article.niche, "Insights"];
+const articleHtml = await renderMarkdown(article.content);
 ---
 
 <ContentLayout
@@ -158,7 +155,7 @@ const articleParagraphs = article.content
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <span class="text-black">Editorial Staff</span>
+            <span class="text-black">{article.author}</span>
           </div>
           <div class="hidden h-4 w-[1px] bg-gray-200 md:block"></div>
           <div class="flex items-center gap-2">
@@ -166,7 +163,7 @@ const articleParagraphs = article.content
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            {readTime} MINUTE READ
+            {article.readTimeLabel.toUpperCase()}
           </div>
           <div class="hidden h-4 w-[1px] bg-gray-200 md:block"></div>
           <div>{publishDate}</div>
@@ -176,7 +173,7 @@ const articleParagraphs = article.content
       <div class="mb-20 w-full lg:mb-32">
         <div class="aspect-[16/9] overflow-hidden rounded-sm bg-gray-100 xl:aspect-[21/9]">
           <img
-            src={article.featured_image}
+            src={article.featuredImage}
             class="h-full w-full object-cover"
             alt="Article hero"
             loading="eager"
@@ -227,41 +224,10 @@ const articleParagraphs = article.content
         </aside>
 
         <article class="min-w-0 w-full max-w-none lg:col-span-8 lg:col-start-4">
-          <div class="prose prose-lg prose-stone max-w-none space-y-8 text-lg leading-[1.8] text-gray-700 md:text-2xl">
-            <p class={`first-letter:float-left first-letter:mr-3 first-letter:mt-2 first-letter:text-7xl first-letter:font-bold ${meta.accentText}`}>
-              In the current climate of rapid evolution, understanding the fundamental pillars of {meta.label.toLowerCase()} is no longer optional. It is a prerequisite for those who intend to maintain a competitive advantage while fostering sustainable growth and architectural integrity in their personal or professional spheres.
-            </p>
-            <h2 class="mb-8 mt-16 text-3xl font-bold italic text-black">The Paradigm Shift</h2>
-            <p>
-              As we look toward the mid-decade mark, we observe a significant recalibration of value systems. It is not merely about the accumulation of assets or the aesthetic refinement of a space; it is about the integration of these elements into a cohesive life-system that supports cognitive performance and high-level vitality.
-            </p>
-            <blockquote class={`my-12 border-l-4 py-2 pl-8 ${meta.accentBorder}`}>
-              <p class="text-2xl font-bold italic leading-tight text-black lg:text-3xl">
-                "Excellence is not an act, but a systemic habit. In the realm of {article.metadata?.niche || 'strategic thinking'}, systems always outperform individual efforts."
-              </p>
-              <cite class="mt-4 block font-sans text-[10px] font-black uppercase tracking-widest text-gray-400">- Chief Editorial Officer</cite>
-            </blockquote>
-            <h2 class="mb-8 mt-16 text-3xl font-bold italic text-black">Implementing Core Frameworks</h2>
-            <p>
-              To achieve the desired results, one must move beyond introductory concepts and begin the arduous but rewarding work of implementing advanced methodologies. This includes a rigorous audit of current practices and a relentless focus on the 20% of actions that yield 80% of desired outcomes.
-            </p>
-            <ul class="my-10 list-none space-y-4 pl-0">
-              {[
-                "Analysis of baseline performance metrics",
-                "Systematic elimination of friction points",
-                "Introduction of compounding growth habits",
-              ].map((item, i) => (
-                <li class="flex items-start gap-4">
-                  <span class={`font-bold ${meta.accentText}`}>0{i + 1}.</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            {
-              articleParagraphs.map((paragraph) => (
-                <p>{paragraph}</p>
-              ))
-            }
+          <div
+            class={`prose prose-lg prose-stone max-w-none text-lg leading-[1.8] text-gray-700 md:text-2xl [&_a]:font-semibold [&_a]:text-amber-700 [&_a]:no-underline [&_a:hover]:text-amber-800 [&_blockquote]:border-l-4 [&_blockquote]:py-2 [&_blockquote]:pl-8 [&_blockquote]:italic [&_blockquote]:text-black [&_h1]:text-4xl [&_h1]:font-bold [&_h1]:italic [&_h2]:mt-16 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:italic [&_h3]:mt-12 [&_h3]:text-2xl [&_h3]:font-bold [&_ol]:pl-6 [&_ul]:pl-6 [&_li]:my-2 ${meta.accentBorder}`}
+            set:html={articleHtml}
+          >
           </div>
           <div class="mt-20 flex flex-wrap gap-4 border-t border-gray-100 pt-10">
             {tags.map((tag) => (
