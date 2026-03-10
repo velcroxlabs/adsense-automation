@@ -25,15 +25,66 @@ except ImportError:
     print("OpenAI library not installed. Install with: pip install openai")
 
 
+DEFAULT_KEYWORD_SOURCES = [
+    "keywords/final_batch.csv",
+    "keywords/filtered_keywords.csv",
+    "keywords/research_candidates.csv",
+]
+
+
+def first_present_value(row: Dict[str, Any], *keys: str, default: Any = None) -> Any:
+    for key in keys:
+        value = row.get(key)
+        if value not in (None, ""):
+            return value
+    return default
+
+
+def to_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def to_float(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def normalize_keyword_row(row: Dict[str, Any]) -> Dict[str, Any]:
+    keyword = str(first_present_value(row, "keyword", default="")).strip()
+    niche = str(first_present_value(row, "niche", "seed", default="General")).strip() or "General"
+    intent = str(first_present_value(row, "intent", default="informational")).strip().lower() or "informational"
+    search_volume = to_int(first_present_value(row, "search_volume", "estimated_volume", default=0))
+    kd = to_float(first_present_value(row, "kd", "estimated_kd", "keyword_difficulty", default=0))
+    cpc = to_float(first_present_value(row, "cpc", default=0))
+    competition = str(first_present_value(row, "competition", default="low")).strip().lower() or "low"
+
+    return {
+        "keyword": keyword,
+        "niche": niche,
+        "intent": intent,
+        "search_volume": search_volume,
+        "kd": kd,
+        "cpc": cpc,
+        "competition": competition,
+    }
+
+
 def load_keywords(csv_path: str) -> List[Dict[str, Any]]:
-    """Load keywords from a CSV file."""
+    """Load and normalize keywords from a CSV file."""
     keywords: List[Dict[str, Any]] = []
 
     try:
         with open(csv_path, "r", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
             for row in reader:
-                keywords.append(row)
+                normalized = normalize_keyword_row(row)
+                if normalized["keyword"]:
+                    keywords.append(normalized)
 
         print(f"Loaded {len(keywords)} keywords from {csv_path}")
         return keywords
@@ -43,6 +94,14 @@ def load_keywords(csv_path: str) -> List[Dict[str, Any]]:
     except Exception as exc:
         print(f"Error loading keywords: {exc}")
         return []
+
+
+def resolve_keywords_csv(project_root: Path) -> Optional[Path]:
+    for relative_path in DEFAULT_KEYWORD_SOURCES:
+        candidate = project_root / relative_path
+        if candidate.exists():
+            return candidate
+    return None
 
 
 def create_slug(keyword: str) -> str:
@@ -69,11 +128,11 @@ def generate_content_with_openai(keyword: str, niche: str, intent: str) -> Optio
 
         # Style Guide for Premium UX
         style_guide = """
+        - Always Start with a hooks to engage the audience in the article
         - NO fluff. NO 'In today's digital world' or 'It is important to note'.
         - Use "Sentence Case" for headings.
         - Use <blockquote> for key insights.
         - Use bolding for technical terms, never for whole sentences.
-        - Keep paragraphs under 3 sentences for mobile readability.
         - If a list has more than 4 items, use a structured table or sub-headings.
         """
 
@@ -111,12 +170,12 @@ def generate_content_with_openai(keyword: str, niche: str, intent: str) -> Optio
         {style_guide}
 
         Tone: Authoritative, Minimalist, and Sophisticated. 
-        Target: {1200 if intent == 'informational' else 800} words.
+        Target: {1200 if intent == 'informational' else 1000} words.
         Format: Clean Markdown only.
         """
 
         response = client.chat.completions.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4o"),
+            model=os.getenv("OPENAI_MODEL", "gpt-5.4"),
             messages=[
                 {
                     "role": "system",
@@ -283,12 +342,20 @@ def main() -> None:
     print("Content Generation Script")
     print("=" * 60)
 
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    keywords_csv = os.path.join(project_root, "keywords", "final_batch.csv")
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent
+    keywords_csv = resolve_keywords_csv(project_root)
     output_dir = "content/articles"
 
-    keywords = load_keywords(keywords_csv)
+    if keywords_csv is None:
+        print("No keyword CSV found.")
+        print("Expected one of:")
+        for relative_path in DEFAULT_KEYWORD_SOURCES:
+            print(f"  - {relative_path}")
+        print("Run keywords/research.py and keywords/filter_keywords.py first.")
+        return
+
+    keywords = load_keywords(str(keywords_csv))
     if not keywords:
         print("No keywords to process")
         return
@@ -300,13 +367,13 @@ def main() -> None:
     print("4. Preview only (no save)")
 
     if not sys.stdin.isatty():
-        choice = "1"
+        choice = "4"
         print(f"\n  Auto-selected option {choice} for non-interactive execution")
     else:
         try:
             choice = input("\nSelect option (1-4): ").strip()
         except EOFError:
-            choice = "1"
+            choice = "4"
             print(f"  Auto-selected option {choice} for non-interactive execution")
 
     print(f"\nProcessing {len(keywords)} keywords...")

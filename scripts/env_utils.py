@@ -27,14 +27,17 @@ def _load_file(path: Path) -> None:
 
 
 def load_project_env() -> None:
+    root = Path(__file__).resolve().parents[1]
+    env_paths = [root / ".env", root / "website" / ".env"]
+
     try:
         from dotenv import load_dotenv
 
-        load_dotenv()
+        for env_path in env_paths:
+            load_dotenv(env_path, override=False)
         return
     except ImportError:
         pass
 
-    root = Path(__file__).resolve().parents[1]
-    _load_file(root / ".env")
-    _load_file(root / "website" / ".env")
+    for env_path in env_paths:
+        _load_file(env_path)
