@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import math
 import os
+import random
 import sys
 import time
 from pathlib import Path
@@ -125,6 +126,11 @@ GOOGLE_ADS_REQUIRED_ENV_VARS = [
     "GOOGLE_ADS_REFRESH_TOKEN",
     "GOOGLE_ADS_CUSTOMER_ID",
 ]
+
+PYTRENDS_MAX_RETRIES = 4
+PYTRENDS_BASE_DELAY_SECONDS = 4
+PYTRENDS_MAX_RESULTS_PER_SEED = 15
+PYTRENDS_INTER_REQUEST_DELAY_SECONDS = 2.5
 
 
 def parse_trend_value(value: Any) -> int:
@@ -369,6 +375,45 @@ def competition_from_kd(kd: float) -> str:
     return "high"
 
 
+def fetch_related_queries_for_seed(seed: str, max_results_per_seed: int) -> List[pd.DataFrame]:
+    for attempt in range(1, PYTRENDS_MAX_RETRIES + 1):
+        try:
+            pytrends.build_payload([seed], timeframe="today 12-m")
+            related = pytrends.related_queries()
+            seed_related = related.get(seed) or {}
+            result_frames: List[pd.DataFrame] = []
+
+            if seed_related.get("top") is not None:
+                top_df = seed_related["top"].copy().head(max_results_per_seed)
+                top_df["seed"] = seed
+                top_df["type"] = "top"
+                result_frames.append(top_df)
+
+            if seed_related.get("rising") is not None:
+                rising_df = seed_related["rising"].copy().head(max_results_per_seed)
+                rising_df["seed"] = seed
+                rising_df["type"] = "rising"
+                result_frames.append(rising_df)
+
+            return result_frames
+        except Exception as exc:
+            message = str(exc)
+            is_rate_limit = "429" in message or "Too Many Requests" in message
+
+            if attempt >= PYTRENDS_MAX_RETRIES or not is_rate_limit:
+                print(f"Error fetching keywords for '{seed}': {exc}")
+                return []
+
+            delay = (PYTRENDS_BASE_DELAY_SECONDS * (2 ** (attempt - 1))) + random.uniform(0.5, 1.5)
+            print(
+                f"Rate limited for '{seed}' on attempt {attempt}/{PYTRENDS_MAX_RETRIES}. "
+                f"Retrying in {delay:.1f}s..."
+            )
+            time.sleep(delay)
+
+    return []
+
+
 def get_related_keywords(seed_keywords: List[str], max_results_per_seed: int = 50) -> pd.DataFrame:
     """
     Get related keywords from Google Trends.
@@ -377,26 +422,9 @@ def get_related_keywords(seed_keywords: List[str], max_results_per_seed: int = 5
     all_keywords: List[pd.DataFrame] = []
 
     for seed in seed_keywords:
-        try:
-            pytrends.build_payload([seed], timeframe="today 12-m")
-            related = pytrends.related_queries()
-            seed_related = related.get(seed) or {}
-
-            if seed_related.get("top") is not None:
-                top_df = seed_related["top"].copy().head(max_results_per_seed)
-                top_df["seed"] = seed
-                top_df["type"] = "top"
-                all_keywords.append(top_df)
-
-            if seed_related.get("rising") is not None:
-                rising_df = seed_related["rising"].copy().head(max_results_per_seed)
-                rising_df["seed"] = seed
-                rising_df["type"] = "rising"
-                all_keywords.append(rising_df)
-
-            time.sleep(1)
-        except Exception as exc:
-            print(f"Error fetching keywords for '{seed}': {exc}")
+        seed_frames = fetch_related_queries_for_seed(seed, max_results_per_seed)
+        all_keywords.extend(seed_frames)
+        time.sleep(PYTRENDS_INTER_REQUEST_DELAY_SECONDS)
 
     if not all_keywords:
         return pd.DataFrame(columns=["keyword", "trend_value", "seed", "type"])
@@ -480,7 +508,7 @@ def main() -> None:
     else:
         print("Google Ads keyword metrics: unavailable, using heuristic volume/CPC fallback")
 
-    keywords_df = get_related_keywords(seed_niches, max_results_per_seed=40)
+    keywords_df = get_related_keywords(seed_niches, max_results_per_seed=PYTRENDS_MAX_RESULTS_PER_SEED)
     if keywords_df.empty:
         print("No keywords found. Check internet connection or try different seeds.")
         return
